@@ -652,6 +652,29 @@ if (tg && tg.MainButton) {
 async function submitOrder() {
   if (!tg || !tg.MainButton) return;
 
+  if (currentTab === 'equipment') {
+    var items = Object.values(selectedItems);
+    if (items.length === 0) return;
+    var days = getRentalDays();
+    if (days <= 0) {
+      showToast('Please select valid start and end dates', 'error');
+      return;
+    }
+  } else {
+    if (!selectedTariff) return;
+    var purpose = $('purposeInput').value.trim();
+    if (!purpose) {
+      $('purposeError').classList.add('show');
+      showToast('Purpose is required for studio bookings', 'error');
+      return;
+    }
+    var bookingDate = $('bookingDate').value;
+    if (!bookingDate) {
+      showToast('Please select a booking date', 'error');
+      return;
+    }
+  }
+
   var user = null;
   if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
     user = {
@@ -667,15 +690,7 @@ async function submitOrder() {
 
   if (currentTab === 'equipment') {
     var items = Object.values(selectedItems);
-    if (items.length === 0) return;
     var days = getRentalDays();
-    if (days <= 0) {
-      showToast('Please select valid start and end dates', 'error');
-      return;
-    }
-    var startDate = $('startDate').value;
-    var endDate = $('endDate').value;
-
     payload = {
       order_type: 'equipment',
       user: user,
@@ -687,23 +702,11 @@ async function submitOrder() {
           daily_price: item.daily_price
         };
       }),
-      start_date: startDate,
-      end_date: endDate,
+      start_date: $('startDate').value,
+      end_date: $('endDate').value,
       rental_days: days
     };
   } else {
-    if (!selectedTariff) return;
-    var purpose = $('purposeInput').value.trim();
-    if (!purpose) {
-      $('purposeError').classList.add('show');
-      return;
-    }
-    var bookingDate = $('bookingDate').value;
-    if (!bookingDate) {
-      showToast('Please select a booking date', 'error');
-      return;
-    }
-
     payload = {
       order_type: 'studio',
       user: user,
@@ -711,8 +714,8 @@ async function submitOrder() {
       tariff_name: selectedTariff.tariff_name,
       hours: studioHours,
       hourly_rate: selectedTariff.hourly_rate,
-      booking_date: bookingDate,
-      purpose: purpose
+      booking_date: $('bookingDate').value,
+      purpose: $('purposeInput').value.trim()
     };
   }
 
@@ -748,6 +751,7 @@ function resetForm() {
   selectedItems = {};
   selectedTariff = null;
   studioHours = 2;
+  currentCategory = 'All';
   $('startDate').value = '';
   $('endDate').value = '';
   $('bookingDate').value = '';
