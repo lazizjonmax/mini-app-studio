@@ -611,8 +611,25 @@ textarea.form-input{
 
 <script>
 // Configuration
-const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook'; // CHANGE THIS TO YOUR N8N INSTANCE
+const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook';
 const ADMIN_WEBHOOK = WEBHOOK_BASE + '/admin/add-item';
+
+const FETCH_HEADERS = {
+  'Content-Type': 'application/json',
+  'ngrok-skip-browser-warning': 'true'
+};
+
+async function apiFetch(url, options) {
+  var opts = options || {};
+  opts.headers = Object.assign({}, FETCH_HEADERS, opts.headers || {});
+  var res = await fetch(url, opts);
+  var contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    var text = await res.text();
+    throw new Error('Server returned non-JSON response (status ' + res.status + '). Make sure n8n is running and the webhook URL is correct.');
+  }
+  return res;
+}
 
 // Hardcoded credentials
 const VALID_USERNAME = 'admin';
@@ -764,9 +781,8 @@ async function handleEquipmentSubmit(e) {
       type: 'equipment'
     };
 
-    var response = await fetch(ADMIN_WEBHOOK, {
+    var response = await apiFetch(ADMIN_WEBHOOK, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
 
@@ -817,9 +833,8 @@ async function handleTariffSubmit(e) {
       type: 'tariff'
     };
 
-    var response = await fetch(ADMIN_WEBHOOK, {
+    var response = await apiFetch(ADMIN_WEBHOOK, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
 
