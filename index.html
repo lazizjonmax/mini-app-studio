@@ -1,830 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Studio Rental</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-:root{
-  --tg-bg:var(--tg-theme-bg-color,#fff);
-  --tg-secondary-bg:var(--tg-theme-secondary-bg-color,#f0f0f0);
-  --tg-text:var(--tg-theme-text-color,#222);
-  --tg-hint:var(--tg-theme-hint-color,#999);
-  --tg-link:var(--tg-theme-link-color,#2678b7);
-  --tg-button:var(--tg-theme-button-color,#3390ec);
-  --tg-button-text:var(--tg-theme-button-text-color,#fff);
-  --tg-destructive:var(--tg-theme-destructive-text-color,#e53935);
-  --tg-header:var(--tg-theme-header-bg-color,#fff);
-  --tg-subtitle:var(--tg-theme-subtitle-text-color,#888);
-  --radius:14px;
-  --radius-sm:10px;
-  --shadow:0 2px 12px rgba(0,0,0,.08);
-  --shadow-lg:0 8px 30px rgba(0,0,0,.12);
-}
-
-html,body{
-  height:100%;
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-  background:var(--tg-bg);
-  color:var(--tg-text);
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
-
-.app{max-width:480px;margin:0 auto;padding:0 16px 100px;min-height:100vh}
-
-/* ─── Skeleton Loader ─── */
-.skeleton{background:linear-gradient(90deg,var(--tg-secondary-bg) 25%,rgba(255,255,255,.4) 50%,var(--tg-secondary-bg) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-sm)}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-.skeleton-card{height:180px;border-radius:var(--radius);margin-bottom:12px}
-.skeleton-line{height:16px;margin-bottom:8px;border-radius:6px}
-.skeleton-line.short{width:60%}
-.skeleton-line.med{width:80%}
-
-/* ─── Tabs ─── */
-.tabs-wrap{position:sticky;top:0;z-index:50;background:var(--tg-header);padding:12px 0 0;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.tabs{display:flex;gap:0;background:var(--tg-secondary-bg);border-radius:var(--radius);padding:4px;position:relative}
-.tab{flex:1;text-align:center;padding:10px 0;font-size:14px;font-weight:600;color:var(--tg-hint);cursor:pointer;border-radius:var(--radius-sm);transition:color .25s,background .25s,transform .15s;position:relative;z-index:2;user-select:none}
-.tab.active{color:var(--tg-button-text);background:var(--tg-button);box-shadow:var(--shadow)}
-.tab:not(.active):active{transform:scale(.96)}
-
-/* ─── Panels ─── */
-.panel{display:none;animation:fadeSlide .35s ease}
-.panel.visible{display:block}
-@keyframes fadeSlide{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
-/* ─── Section Header ─── */
-.section-header{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--tg-hint);margin:20px 0 10px;padding-left:2px}
-
-/* ─── Category Filter ─── */
-.cat-filter{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.cat-filter::-webkit-scrollbar{display:none}
-.cat-chip{white-space:nowrap;padding:7px 16px;border-radius:20px;font-size:13px;font-weight:500;background:var(--tg-secondary-bg);color:var(--tg-hint);cursor:pointer;transition:all .2s;border:1.5px solid transparent;user-select:none}
-.cat-chip.active{background:var(--tg-button);color:var(--tg-button-text);border-color:var(--tg-button)}
-.cat-chip:not(.active):active{transform:scale(.95)}
-
-/* ─── Equipment Card ─── */
-.eq-card{background:var(--tg-bg);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px;transition:transform .2s,box-shadow .2s}
-.eq-card:active{transform:scale(.985);box-shadow:var(--shadow-lg)}
-.eq-card-inner{display:flex;padding:14px;gap:14px;align-items:flex-start}
-.eq-img{width:80px;height:80px;border-radius:var(--radius-sm);object-fit:cover;background:var(--tg-secondary-bg);flex-shrink:0}
-.eq-img-placeholder{width:80px;height:80px;border-radius:var(--radius-sm);background:var(--tg-secondary-bg);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px}
-.eq-info{flex:1;min-width:0}
-.eq-name{font-size:15px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.eq-desc{font-size:12px;color:var(--tg-hint);margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.eq-price{font-size:14px;font-weight:700;color:var(--tg-button)}
-.eq-price span{font-size:12px;font-weight:400;color:var(--tg-hint)}
-.eq-qty-badge{font-size:11px;color:var(--tg-hint);margin-left:6px}
-.eq-actions{display:flex;align-items:center;gap:0;margin-top:8px;justify-content:flex-end}
-
-/* ─── Qty Picker ─── */
-.qty-picker{display:inline-flex;align-items:center;border-radius:var(--radius-sm);overflow:hidden;background:var(--tg-secondary-bg)}
-.qty-btn{width:36px;height:36px;border:none;background:transparent;color:var(--tg-button);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;font-weight:700}
-.qty-btn:active{background:rgba(0,0,0,.06)}
-.qty-btn:disabled{opacity:.25;cursor:default}
-.qty-val{width:32px;text-align:center;font-size:15px;font-weight:600;color:var(--tg-text)}
-
-/* ─── Date Section ─── */
-.date-section{background:var(--tg-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
-.date-section label{font-size:13px;font-weight:600;color:var(--tg-hint);display:block;margin-bottom:6px}
-.date-row{display:flex;gap:12px}
-.date-row>div{flex:1}
-.date-input{width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1.5px solid var(--tg-secondary-bg);background:var(--tg-secondary-bg);color:var(--tg-text);font-size:14px;font-family:inherit;transition:border-color .2s}
-.date-input:focus{outline:none;border-color:var(--tg-button)}
-.rental-days{text-align:center;font-size:13px;color:var(--tg-hint);margin-top:8px}
-.rental-days strong{color:var(--tg-button);font-size:15px}
-
-/* ─── Studio Tariff Card ─── */
-.tariff-card{background:var(--tg-bg);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px;transition:transform .2s,box-shadow .2s;border:2px solid transparent}
-.tariff-card:active{transform:scale(.985)}
-.tariff-card.selected{border-color:var(--tg-button);box-shadow:0 0 0 1px var(--tg-button),var(--shadow-lg)}
-.tariff-card.unavailable{opacity:.5;pointer-events:none}
-.tariff-header{padding:16px;cursor:pointer}
-.tariff-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
-.tariff-name{font-size:16px;font-weight:700}
-.tariff-rate{font-size:15px;font-weight:700;color:var(--tg-button);white-space:nowrap}
-.tariff-rate span{font-size:12px;font-weight:400;color:var(--tg-hint)}
-.tariff-desc{font-size:13px;color:var(--tg-hint);line-height:1.4}
-.tariff-meta{display:flex;gap:10px;margin-top:8px}
-.tariff-badge{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--tg-secondary-bg);color:var(--tg-hint);font-weight:500}
-.tariff-badge.min{background:rgba(51,144,236,.1);color:var(--tg-button)}
-
-/* ─── Studio Form ─── */
-.studio-form{margin-top:16px}
-.form-group{margin-bottom:14px}
-.form-group label{font-size:13px;font-weight:600;color:var(--tg-hint);display:block;margin-bottom:6px}
-.form-input{width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1.5px solid var(--tg-secondary-bg);background:var(--tg-secondary-bg);color:var(--tg-text);font-size:14px;font-family:inherit;transition:border-color .2s}
-.form-input:focus{outline:none;border-color:var(--tg-button)}
-textarea.form-input{resize:vertical;min-height:72px;line-height:1.5}
-.form-hint{font-size:11px;color:var(--tg-hint);margin-top:4px}
-.form-error{font-size:11px;color:var(--tg-destructive);margin-top:4px;display:none}
-.form-error.show{display:block}
-
-/* ─── Hours Picker ─── */
-.hours-picker{display:flex;align-items:center;gap:12px}
-.hours-picker .qty-picker .qty-val{width:40px}
-.hours-display{font-size:24px;font-weight:700;color:var(--tg-text);min-width:40px;text-align:center}
-
-/* ─── Price Summary ─── */
-.price-summary{background:var(--tg-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin:16px 0}
-.price-row{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--tg-hint);padding:6px 0}
-.price-row.total{font-size:18px;font-weight:700;color:var(--tg-text);border-top:1.5px solid var(--tg-secondary-bg);margin-top:8px;padding-top:12px}
-.price-row.total .total-amount{color:var(--tg-button)}
-
-/* ─── Toast ─── */
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);padding:12px 24px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;z-index:999;transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:var(--shadow-lg);max-width:calc(100vw - 32px);text-align:center}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.toast.error{background:var(--tg-destructive);color:#fff}
-.toast.success{background:#2e7d32;color:#fff}
-
-/* ─── Confirmation Overlay ─── */
-.confirmation-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
-.confirmation-overlay.show{opacity:1;pointer-events:auto}
-.confirmation-card{background:var(--tg-bg);border-radius:20px;padding:32px 24px;text-align:center;width:calc(100% - 48px);max-width:340px;transform:scale(.9);transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:var(--shadow-lg)}
-.confirmation-overlay.show .confirmation-card{transform:scale(1)}
-.confirmation-icon{font-size:48px;margin-bottom:12px}
-.confirmation-title{font-size:20px;font-weight:700;margin-bottom:6px}
-.confirmation-sub{font-size:14px;color:var(--tg-hint);margin-bottom:4px}
-.confirmation-order{font-size:13px;color:var(--tg-button);font-family:monospace;margin-bottom:16px}
-.confirmation-btn{padding:12px 32px;border-radius:var(--radius-sm);border:none;background:var(--tg-button);color:var(--tg-button-text);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s}
-.confirmation-btn:active{opacity:.8}
-
-/* ─── Error State ─── */
-.error-state{text-align:center;padding:48px 24px}
-.error-state-icon{font-size:40px;margin-bottom:12px}
-.error-state-text{font-size:14px;color:var(--tg-hint);margin-bottom:16px;line-height:1.5}
-.retry-btn{padding:10px 24px;border-radius:var(--radius-sm);border:1.5px solid var(--tg-button);background:transparent;color:var(--tg-button);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
-.retry-btn:active{background:var(--tg-button);color:var(--tg-button-text)}
-
-/* ─── Empty Cart Hint ─── */
-.empty-hint{text-align:center;padding:24px;color:var(--tg-hint);font-size:13px}
-
-/* ─── Spinner ─── */
-.spinner-wrap{display:flex;justify-content:center;padding:40px 0}
-.spinner{width:32px;height:32px;border:3px solid var(--tg-secondary-bg);border-top-color:var(--tg-button);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ─── Misc ─── */
-.divider{height:1px;background:var(--tg-secondary-bg);margin:16px 0}
-.fade-in{animation:fadeIn .4s ease}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Rental</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .equipment-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .equipment-card:hover {
+            transform: translateY(-5px);
+        }
+        .equipment-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .equipment-card .info {
+            padding: 15px;
+        }
+        .equipment-card h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .equipment-card p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .equipment-card .price {
+            font-weight: bold;
+            color: #667eea;
+        }
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .quantity-selector button {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .quantity-selector span {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .date-picker {
+            margin: 20px 0;
+        }
+        .date-picker label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .date-picker input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .studio-options {
+            margin: 20px 0;
+        }
+        .studio-options select, .studio-options input, .studio-options textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: #5a67d8;
+        }
+        .error {
+            color: #e53e3e;
+            background: #fed7d7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-
-<div class="app" id="app">
-
-  <!-- Skeleton Loader -->
-  <div id="skeleton">
-    <div style="height:48px;margin:12px 0"></div>
-    <div class="skeleton skeleton-card"></div>
-    <div class="skeleton skeleton-card"></div>
-    <div class="skeleton skeleton-card"></div>
-    <div class="skeleton skeleton-card"></div>
-    <div class="skeleton skeleton-card"></div>
-  </div>
-
-  <!-- Error State -->
-  <div id="errorState" style="display:none">
-    <div class="error-state">
-      <div class="error-state-icon">&#9888;&#65039;</div>
-      <div class="error-state-text" id="errorText">Failed to load catalog. Please try again.</div>
-      <button class="retry-btn" onclick="loadCatalog()">Retry</button>
-    </div>
-  </div>
-
-  <!-- Main Content -->
-  <div id="mainContent" style="display:none">
-
-    <!-- Tabs -->
-    <div class="tabs-wrap">
-      <div class="tabs">
-        <div class="tab active" data-tab="equipment" onclick="switchTab('equipment')">
-          &#128247; Equipment
+    <div class="container">
+        <h1 style="text-align: center; color: #333; margin-bottom: 30px;">Studio Rental</h1>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('equipment')">Equipment</div>
+            <div class="tab" onclick="switchTab('studio')">Studio</div>
         </div>
-        <div class="tab" data-tab="studio" onclick="switchTab('studio')">
-          &#127916; Studio
-        </div>
-      </div>
-    </div>
 
-    <!-- ═══ EQUIPMENT PANEL ═══ -->
-    <div id="panelEquipment" class="panel visible">
-      <div class="section-header">Category</div>
-      <div class="cat-filter" id="catFilter"></div>
-      <div id="equipmentList"></div>
-
-      <div id="eqDateSection" style="display:none">
-        <div class="section-header">Rental Period</div>
-        <div class="date-section">
-          <div class="date-row">
-            <div>
-              <label>Start Date</label>
-              <input type="date" class="date-input" id="startDate" onchange="onDateChange()">
+        <div id="equipment-tab" class="tab-content active">
+            <div class="date-picker">
+                <label>Rental Period:</label>
+                <input type="date" id="start-date" onchange="updateTotal()">
+                <input type="date" id="end-date" style="margin-top: 10px;" onchange="updateTotal()">
             </div>
-            <div>
-              <label>End Date</label>
-              <input type="date" class="date-input" id="endDate" onchange="onDateChange()">
+            <div id="equipment-grid" class="equipment-grid">
+                <!-- Equipment cards will be loaded here -->
             </div>
-          </div>
-          <div class="rental-days" id="rentalDaysInfo" style="display:none">
-            Rental: <strong id="rentalDaysNum">0</strong> day(s)
-          </div>
+            <div id="equipment-total" style="font-size: 18px; font-weight: bold; margin: 20px 0; text-align: center;"></div>
+            <button class="btn" onclick="submitEquipmentOrder()">Rent Equipment</button>
         </div>
-      </div>
 
-      <div id="eqPriceSummary" style="display:none"></div>
+        <div id="studio-tab" class="tab-content">
+            <div class="studio-options">
+                <select id="tariff-select">
+                    <!-- Tariffs will be loaded here -->
+                </select>
+                <input type="date" id="booking-date">
+                <input type="number" id="hours" placeholder="Number of hours" min="1">
+                <textarea id="purpose" placeholder="Purpose of booking" rows="3"></textarea>
+            </div>
+            <div id="studio-total" style="font-size: 18px; font-weight: bold; margin: 20px 0; text-align: center;"></div>
+            <button class="btn" onclick="submitStudioOrder()">Book Studio</button>
+        </div>
+
+        <div id="error-message" class="error" style="display: none;"></div>
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
     </div>
 
-    <!-- ═══ STUDIO PANEL ═══ -->
-    <div id="panelStudio" class="panel">
-      <div class="section-header">Choose a Tariff</div>
-      <div id="tariffList"></div>
-
-      <div id="studioForm" class="studio-form" style="display:none">
-        <div class="section-header">Booking Details</div>
-
-        <div class="form-group">
-          <label>Number of Hours</label>
-          <div class="hours-picker">
-            <div class="qty-picker">
-              <button class="qty-btn" onclick="adjustHours(-1)">&#8722;</button>
-              <span class="qty-val" id="hoursValue">2</span>
-              <button class="qty-btn" onclick="adjustHours(1)">+</button>
-            </div>
-            <span style="font-size:13px;color:var(--tg-hint)">min. <span id="minHoursLabel">2</span>h</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Booking Date</label>
-          <input type="date" class="form-input" id="bookingDate" onchange="updateStudioPrice()">
-        </div>
-
-        <div class="form-group">
-          <label>Purpose of Shoot <span style="color:var(--tg-destructive)">*</span></label>
-          <textarea class="form-input" id="purposeInput" placeholder="Describe your shoot concept..." oninput="onPurposeInput()"></textarea>
-          <div class="form-error" id="purposeError">Purpose is required for studio bookings</div>
-        </div>
-      </div>
-
-      <div id="studioPriceSummary" style="display:none"></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- Toast -->
-<div class="toast" id="toast"></div>
-
-<!-- Confirmation Overlay -->
-<div class="confirmation-overlay" id="confirmationOverlay">
-  <div class="confirmation-card">
-    <div class="confirmation-icon">&#9989;</div>
-    <div class="confirmation-title" id="confirmTitle">Order Submitted!</div>
-    <div class="confirmation-sub" id="confirmSub"></div>
-    <div class="confirmation-order" id="confirmOrderId"></div>
-    <button class="confirmation-btn" onclick="closeConfirmation()">OK</button>
-  </div>
-</div>
-
-<script>
-const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook';
-
-const FETCH_HEADERS = {
-  'Content-Type': 'application/json',
-  'ngrok-skip-browser-warning': 'true'
-};
-
-const tg = window.Telegram && window.Telegram.WebApp;
-if (tg) {
-  tg.ready();
-  tg.expand();
-  tg.enableClosingConfirmation();
-}
-
-let catalog = { equipment: [], tariffs: [] };
-let selectedItems = {};
-let selectedTariff = null;
-let currentTab = 'equipment';
-let currentCategory = 'All';
-
-function $(id) { return document.getElementById(id); }
-
-function formatPrice(n) {
-  return Number(n).toLocaleString('ru-RU') + ' \u20BD';
-}
-
-async function apiFetch(url, options) {
-  var opts = options || {};
-  opts.headers = Object.assign({}, FETCH_HEADERS, opts.headers || {});
-  var res = await fetch(url, opts);
-  var contentType = res.headers.get('content-type') || '';
-  if (!contentType.includes('application/json')) {
-    var text = await res.text();
-    throw new Error('Server returned non-JSON response (status ' + res.status + '). Make sure n8n is running and the webhook URL is correct.');
-  }
-  return res;
-}
-
-// ─── Catalog Loading ───
-async function loadCatalog() {
-  $('skeleton').style.display = '';
-  $('errorState').style.display = 'none';
-  $('mainContent').style.display = 'none';
-
-  try {
-    var res = await apiFetch(WEBHOOK_BASE + '/catalog');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    catalog = await res.json();
-    if (!catalog.success) throw new Error('Catalog request failed');
-
-    $('skeleton').style.display = 'none';
-    $('mainContent').style.display = '';
-    renderEquipment();
-    renderTariffs();
-    updateMainButton();
-  } catch (e) {
-    console.error('Catalog load error:', e);
-    $('skeleton').style.display = 'none';
-    $('errorState').style.display = '';
-    $('errorText').textContent = e.message || 'Failed to load catalog. Please check your connection and try again.';
-  }
-}
-
-// ─── Tab Switching ───
-function switchTab(tab) {
-  if (tab === currentTab) return;
-  currentTab = tab;
-
-  document.querySelectorAll('.tab').forEach(function(t) {
-    t.classList.toggle('active', t.dataset.tab === tab);
-  });
-
-  $('panelEquipment').classList.toggle('visible', tab === 'equipment');
-  $('panelStudio').classList.toggle('visible', tab === 'studio');
-
-  if (tab === 'equipment') {
-    $('panelEquipment').style.animation = 'none';
-    void $('panelEquipment').offsetWidth;
-    $('panelEquipment').style.animation = '';
-  } else {
-    $('panelStudio').style.animation = 'none';
-    void $('panelStudio').offsetWidth;
-    $('panelStudio').style.animation = '';
-  }
-
-  updateMainButton();
-}
-
-// ─── Equipment Rendering ───
-function renderEquipment() {
-  var categories = ['All'];
-  var seen = {};
-  catalog.equipment.forEach(function(eq) {
-    if (!seen[eq.category]) {
-      seen[eq.category] = true;
-      categories.push(eq.category);
-    }
-  });
-
-  var filterHtml = '';
-  categories.forEach(function(cat) {
-    filterHtml += '<div class="cat-chip' + (cat === currentCategory ? ' active' : '') + '" onclick="filterCategory(\'' + cat.replace(/'/g, "\\'") + '\')">' + cat + '</div>';
-  });
-  $('catFilter').innerHTML = filterHtml;
-
-  renderEquipmentList();
-}
-
-function filterCategory(cat) {
-  currentCategory = cat;
-  document.querySelectorAll('.cat-chip').forEach(function(c) {
-    c.classList.toggle('active', c.textContent === cat);
-  });
-  renderEquipmentList();
-}
-
-function renderEquipmentList() {
-  var items = currentCategory === 'All'
-    ? catalog.equipment
-    : catalog.equipment.filter(function(eq) { return eq.category === currentCategory; });
-
-  if (items.length === 0) {
-    $('equipmentList').innerHTML = '<div class="empty-hint">No equipment in this category</div>';
-    return;
-  }
-
-  var html = '';
-  items.forEach(function(eq) {
-    var qty = selectedItems[eq.item_id] ? selectedItems[eq.item_id].quantity : 0;
-    html += '<div class="eq-card fade-in">'
-      + '<div class="eq-card-inner">'
-      + (eq.image_url
-        ? '<img class="eq-img" src="' + eq.image_url + '" alt="' + eq.name + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="eq-img-placeholder" style="display:none">&#128247;</div>'
-        : '<div class="eq-img-placeholder">&#128247;</div>')
-      + '<div class="eq-info">'
-      + '<div class="eq-name">' + eq.name + '</div>'
-      + '<div class="eq-desc">' + (eq.description || '') + '</div>'
-      + '<div class="eq-price">' + formatPrice(eq.daily_price) + ' <span>/ day</span>'
-      + '<span class="eq-qty-badge">&#8226; ' + eq.available_qty + ' avail.</span></div>'
-      + '<div class="eq-actions">'
-      + '<div class="qty-picker">'
-      + '<button class="qty-btn" onclick="adjustQty(\'' + eq.item_id + '\',-1)"' + (qty <= 0 ? ' disabled' : '') + '>&#8722;</button>'
-      + '<span class="qty-val">' + qty + '</span>'
-      + '<button class="qty-btn" onclick="adjustQty(\'' + eq.item_id + '\',1)"' + (qty >= eq.available_qty ? ' disabled' : '') + '>+</button>'
-      + '</div></div></div></div></div>';
-  });
-
-  $('equipmentList').innerHTML = html;
-  updateEqDateVisibility();
-}
-
-function adjustQty(itemId, delta) {
-  var eq = catalog.equipment.find(function(e) { return e.item_id === itemId; });
-  if (!eq) return;
-
-  if (!selectedItems[itemId]) {
-    selectedItems[itemId] = { item_id: itemId, name: eq.name, quantity: 0, daily_price: eq.daily_price };
-  }
-
-  selectedItems[itemId].quantity += delta;
-  if (selectedItems[itemId].quantity <= 0) {
-    delete selectedItems[itemId];
-  } else if (selectedItems[itemId].quantity > eq.available_qty) {
-    selectedItems[itemId].quantity = eq.available_qty;
-  }
-
-  renderEquipmentList();
-  updateEqPricePreview();
-  updateMainButton();
-}
-
-// ─── Equipment Date Logic ───
-function updateEqDateVisibility() {
-  var hasItems = Object.keys(selectedItems).length > 0;
-  $('eqDateSection').style.display = hasItems ? '' : 'none';
-  if (!hasItems) {
-    $('eqPriceSummary').style.display = 'none';
-  }
-}
-
-function onDateChange() {
-  updateRentalDays();
-  updateEqPricePreview();
-  updateMainButton();
-}
-
-function updateRentalDays() {
-  var start = $('startDate').value;
-  var end = $('endDate').value;
-
-  if (start && end) {
-    var d1 = new Date(start);
-    var d2 = new Date(end);
-    var days = Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24));
-    if (days > 0) {
-      $('rentalDaysInfo').style.display = '';
-      $('rentalDaysNum').textContent = days;
-      return days;
-    }
-  }
-  $('rentalDaysInfo').style.display = 'none';
-  return 0;
-}
-
-function getRentalDays() {
-  var start = $('startDate').value;
-  var end = $('endDate').value;
-  if (!start || !end) return 0;
-  var days = Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24));
-  return days > 0 ? days : 0;
-}
-
-function updateEqPricePreview() {
-  var days = getRentalDays();
-  var items = Object.values(selectedItems);
-  if (items.length === 0 || days === 0) {
-    $('eqPriceSummary').style.display = 'none';
-    return;
-  }
-
-  var total = 0;
-  var lines = '';
-  items.forEach(function(item) {
-    var lineTotal = item.quantity * item.daily_price * days;
-    total += lineTotal;
-    lines += '<div class="price-row"><span>' + item.name + ' x' + item.quantity + ' x' + days + 'd</span><span>' + formatPrice(lineTotal) + '</span></div>';
-  });
-
-  $('eqPriceSummary').innerHTML = '<div class="price-summary">'
-    + lines
-    + '<div class="price-row total"><span>Total</span><span class="total-amount">' + formatPrice(total) + '</span></div>'
-    + '</div>';
-  $('eqPriceSummary').style.display = '';
-}
-
-// ─── Studio Rendering ───
-function renderTariffs() {
-  var available = catalog.tariffs.filter(function(t) { return t.available !== false; });
-  var unavailable = catalog.tariffs.filter(function(t) { return t.available === false; });
-
-  var html = '';
-  available.forEach(function(t) {
-    var sel = selectedTariff && selectedTariff.tariff_id === t.tariff_id;
-    html += '<div class="tariff-card' + (sel ? ' selected' : '') + '" onclick="selectTariff(\'' + t.tariff_id + '\')">'
-      + '<div class="tariff-header">'
-      + '<div class="tariff-top">'
-      + '<div class="tariff-name">' + t.tariff_name + '</div>'
-      + '<div class="tariff-rate">' + formatPrice(t.hourly_rate) + '<span>/h</span></div>'
-      + '</div>'
-      + '<div class="tariff-desc">' + (t.description || '') + '</div>'
-      + '<div class="tariff-meta">'
-      + '<span class="tariff-badge min">Min ' + t.min_hours + 'h</span>'
-      + '</div></div></div>';
-  });
-
-  unavailable.forEach(function(t) {
-    html += '<div class="tariff-card unavailable">'
-      + '<div class="tariff-header">'
-      + '<div class="tariff-top">'
-      + '<div class="tariff-name">' + t.tariff_name + '</div>'
-      + '<div class="tariff-rate" style="color:var(--tg-hint)">' + formatPrice(t.hourly_rate) + '<span>/h</span></div>'
-      + '</div>'
-      + '<div class="tariff-desc">' + (t.description || '') + '</div>'
-      + '<div class="tariff-meta"><span class="tariff-badge">Unavailable</span></div>'
-      + '</div></div>';
-  });
-
-  $('tariffList').innerHTML = html;
-}
-
-function selectTariff(tariffId) {
-  var tariff = catalog.tariffs.find(function(t) { return t.tariff_id === tariffId; });
-  if (!tariff || tariff.available === false) return;
-
-  if (selectedTariff && selectedTariff.tariff_id === tariffId) {
-    selectedTariff = null;
-    $('studioForm').style.display = 'none';
-    $('studioPriceSummary').style.display = 'none';
-  } else {
-    selectedTariff = tariff;
-    studioHours = tariff.min_hours;
-    $('hoursValue').textContent = studioHours;
-    $('minHoursLabel').textContent = tariff.min_hours;
-    $('studioForm').style.display = '';
-    $('purposeError').classList.remove('show');
-
-    var today = new Date().toISOString().split('T')[0];
-    if (!$('bookingDate').value) {
-      $('bookingDate').value = today;
-    }
-  }
-
-  renderTariffs();
-  updateStudioPrice();
-  updateMainButton();
-}
-
-var studioHours = 2;
-
-function adjustHours(delta) {
-  if (!selectedTariff) return;
-  studioHours += delta;
-  if (studioHours < selectedTariff.min_hours) studioHours = selectedTariff.min_hours;
-  if (studioHours > 24) studioHours = 24;
-  $('hoursValue').textContent = studioHours;
-  updateStudioPrice();
-  updateMainButton();
-}
-
-function onPurposeInput() {
-  $('purposeError').classList.remove('show');
-  updateMainButton();
-}
-
-function updateStudioPrice() {
-  if (!selectedTariff) {
-    $('studioPriceSummary').style.display = 'none';
-    return;
-  }
-
-  var total = studioHours * selectedTariff.hourly_rate;
-  $('studioPriceSummary').innerHTML = '<div class="price-summary">'
-    + '<div class="price-row"><span>' + selectedTariff.tariff_name + '</span><span>' + formatPrice(selectedTariff.hourly_rate) + '/h</span></div>'
-    + '<div class="price-row"><span>Duration</span><span>' + studioHours + ' hour(s)</span></div>'
-    + '<div class="price-row total"><span>Total</span><span class="total-amount">' + formatPrice(total) + '</span></div>'
-    + '</div>';
-  $('studioPriceSummary').style.display = '';
-}
-
-// ─── MainButton ───
-function updateMainButton() {
-  if (!tg || !tg.MainButton) return;
-
-  if (currentTab === 'equipment') {
-    var items = Object.values(selectedItems);
-    var days = getRentalDays();
-    if (items.length === 0) {
-      tg.MainButton.hide();
-      return;
-    }
-    var total = 0;
-    items.forEach(function(item) {
-      total += item.quantity * item.daily_price * days;
-    });
-    tg.MainButton.setParams({
-      text: items.length > 0 && days > 0 ? 'Order \u2014 ' + formatPrice(total) : 'Select dates',
-      color: days > 0 ? tg.themeParams.button_color : '#999',
-      is_active: days > 0,
-      is_visible: true
-    });
-  } else {
-    if (!selectedTariff) {
-      tg.MainButton.hide();
-      return;
-    }
-    var total = studioHours * selectedTariff.hourly_rate;
-    var purpose = $('purposeInput').value.trim();
-    var hasDate = !!$('bookingDate').value;
-    var canSubmit = purpose.length > 0 && hasDate;
-    tg.MainButton.setParams({
-      text: 'Book \u2014 ' + formatPrice(total),
-      color: canSubmit ? tg.themeParams.button_color : '#999',
-      is_active: canSubmit,
-      is_visible: true
-    });
-  }
-}
-
-if (tg && tg.MainButton) {
-  tg.MainButton.onClick(submitOrder);
-}
-
-// ─── Order Submission ───
-async function submitOrder() {
-  if (!tg || !tg.MainButton) return;
-
-  if (currentTab === 'equipment') {
-    var items = Object.values(selectedItems);
-    if (items.length === 0) return;
-    var days = getRentalDays();
-    if (days <= 0) {
-      showToast('Please select valid start and end dates', 'error');
-      return;
-    }
-  } else {
-    if (!selectedTariff) return;
-    var purpose = $('purposeInput').value.trim();
-    if (!purpose) {
-      $('purposeError').classList.add('show');
-      showToast('Purpose is required for studio bookings', 'error');
-      return;
-    }
-    var bookingDate = $('bookingDate').value;
-    if (!bookingDate) {
-      showToast('Please select a booking date', 'error');
-      return;
-    }
-  }
-
-  var user = null;
-  if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-    user = {
-      id: tg.initDataUnsafe.user.id,
-      username: tg.initDataUnsafe.user.username || '',
-      first_name: tg.initDataUnsafe.user.first_name || ''
-    };
-  } else {
-    user = { id: 0, username: 'test_user', first_name: 'Test' };
-  }
-
-  var payload = {};
-
-  if (currentTab === 'equipment') {
-    var items = Object.values(selectedItems);
-    var days = getRentalDays();
-    payload = {
-      order_type: 'equipment',
-      user: user,
-      items: items.map(function(item) {
-        return {
-          item_id: item.item_id,
-          name: item.name,
-          quantity: item.quantity,
-          daily_price: item.daily_price
-        };
-      }),
-      start_date: $('startDate').value,
-      end_date: $('endDate').value,
-      rental_days: days
-    };
-  } else {
-    payload = {
-      order_type: 'studio',
-      user: user,
-      tariff_id: selectedTariff.tariff_id,
-      tariff_name: selectedTariff.tariff_name,
-      hours: studioHours,
-      hourly_rate: selectedTariff.hourly_rate,
-      booking_date: $('bookingDate').value,
-      purpose: $('purposeInput').value.trim()
-    };
-  }
-
-  tg.MainButton.showProgress();
-
-  try {
-    var res = await apiFetch(WEBHOOK_BASE + '/order', {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-
-    var data = await res.json();
-
-    if (data.success) {
-      showConfirmation(data);
-      resetForm();
-    } else {
-      var errMsg = data.message || data.error || 'Something went wrong';
-      showToast(errMsg, 'error');
-    }
-  } catch (e) {
-    console.error('Order submission error:', e);
-    showToast('Network error. Please try again.', 'error');
-  } finally {
-    if (tg && tg.MainButton) {
-      tg.MainButton.hideProgress();
-    }
-  }
-}
-
-function resetForm() {
-  selectedItems = {};
-  selectedTariff = null;
-  studioHours = 2;
-  currentCategory = 'All';
-  $('startDate').value = '';
-  $('endDate').value = '';
-  $('bookingDate').value = '';
-  $('purposeInput').value = '';
-  $('studioForm').style.display = 'none';
-  $('studioPriceSummary').style.display = 'none';
-  $('eqPriceSummary').style.display = 'none';
-  $('rentalDaysInfo').style.display = 'none';
-  $('eqDateSection').style.display = 'none';
-  renderEquipment();
-  renderTariffs();
-  updateMainButton();
-}
-
-// ─── Toast ───
-var toastTimeout = null;
-function showToast(msg, type) {
-  var el = $('toast');
-  el.textContent = msg;
-  el.className = 'toast ' + (type || '') + ' show';
-  clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(function() {
-    el.classList.remove('show');
-  }, 3500);
-}
-
-// ─── Confirmation ───
-function showConfirmation(data) {
-  $('confirmTitle').textContent = data.order_type === 'equipment' ? 'Equipment Order Submitted!' : 'Studio Booking Submitted!';
-  $('confirmSub').textContent = data.message || ('Total: ' + formatPrice(data.total_price));
-  $('confirmOrderId').textContent = data.order_id || '';
-  $('confirmationOverlay').classList.add('show');
-}
-
-function closeConfirmation() {
-  $('confirmationOverlay').classList.remove('show');
-}
-
-// ─── Init ───
-(function() {
-  var today = new Date().toISOString().split('T')[0];
-  $('startDate').setAttribute('min', today);
-  $('endDate').setAttribute('min', today);
-  $('bookingDate').setAttribute('min', today);
-
-  $('startDate').addEventListener('change', function() {
-    if ($('startDate').value) {
-      $('endDate').setAttribute('min', $('startDate').value);
-      if ($('endDate').value && $('endDate').value < $('startDate').value) {
-        $('endDate').value = $('startDate').value;
-      }
-    }
-    onDateChange();
-  });
-
-  loadCatalog();
-})();
-</script>
+    <script>
+        const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook'; // Replace with your n8n URL
+        let tg = window.Telegram.WebApp;
+        let catalog = { equipment: [], tariffs: [] };
+        let selectedEquipment = {};
+
+        tg.expand();
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.${tab === 'equipment' ? 'tab:first-child' : 'tab:last-child'}`).classList.add('active');
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => errorDiv.style.display = 'none', 5000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        async function loadCatalog() {
+            showLoading(true);
+            try {
+                const response = await fetch(`${WEBHOOK_BASE}/catalog`, {
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    catalog = data;
+                    renderEquipment();
+                    renderTariffs();
+                } else {
+                    showError('Failed to load catalog');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
+            showLoading(false);
+        }
+
+        function renderEquipment() {
+            const grid = document.getElementById('equipment-grid');
+            grid.innerHTML = '';
+            catalog.equipment.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'equipment-card';
+                card.innerHTML = `
+                    <img src="${item.image_url || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="${item.name}">
+                    <div class="info">
+                        <h3>${item.name}</h3>
+                        <p>Category: ${item.category}</p>
+                        <p class="price">₽${item.daily_price}/day</p>
+                        <p>Available: ${item.available_qty}</p>
+                        <div class="quantity-selector">
+                            <button onclick="changeQuantity('${item.item_id}', -1)">-</button>
+                            <span id="qty-${item.item_id}">0</span>
+                            <button onclick="changeQuantity('${item.item_id}', 1)">+</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderTariffs() {
+            const select = document.getElementById('tariff-select');
+            select.innerHTML = '<option value="">Select a tariff</option>';
+            catalog.tariffs.forEach(tariff => {
+                if (tariff.available) {
+                    const option = document.createElement('option');
+                    option.value = tariff.tariff_id;
+                    option.textContent = `${tariff.tariff_name} - ₽${tariff.hourly_rate}/hour (min ${tariff.min_hours}h)`;
+                    option.dataset.rate = tariff.hourly_rate;
+                    option.dataset.minHours = tariff.min_hours;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        function changeQuantity(itemId, delta) {
+            const qtySpan = document.getElementById(`qty-${itemId}`);
+            let qty = parseInt(qtySpan.textContent) + delta;
+            const item = catalog.equipment.find(i => i.item_id === itemId);
+            qty = Math.max(0, Math.min(qty, item.available_qty));
+            qtySpan.textContent = qty;
+            selectedEquipment[itemId] = qty;
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const startDate = new Date(document.getElementById('start-date').value);
+            const endDate = new Date(document.getElementById('end-date').value);
+            if (startDate && endDate && startDate <= endDate) {
+                const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+                let total = 0;
+                Object.entries(selectedEquipment).forEach(([itemId, qty]) => {
+                    if (qty > 0) {
+                        const item = catalog.equipment.find(i => i.item_id === itemId);
+                        total += item.daily_price * qty * days;
+                    }
+                });
+                document.getElementById('equipment-total').textContent = `Total: ₽${total}`;
+            }
+        }
+
+        function updateStudioTotal() {
+            const tariffSelect = document.getElementById('tariff-select');
+            const hoursInput = document.getElementById('hours');
+            const selectedOption = tariffSelect.options[tariffSelect.selectedIndex];
+            if (selectedOption && hoursInput.value) {
+                const rate = parseInt(selectedOption.dataset.rate);
+                const hours = parseInt(hoursInput.value);
+                const minHours = parseInt(selectedOption.dataset.minHours);
+                if (hours >= minHours) {
+                    const total = rate * hours;
+                    document.getElementById('studio-total').textContent = `Total: ₽${total}`;
+                } else {
+                    document.getElementById('studio-total').textContent = `Minimum ${minHours} hours required`;
+                }
+            }
+        }
+
+        document.getElementById('tariff-select').addEventListener('change', updateStudioTotal);
+        document.getElementById('hours').addEventListener('input', updateStudioTotal);
+
+        async function submitEquipmentOrder() {
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            if (!startDate || !endDate) {
+                showError('Please select rental dates');
+                return;
+            }
+            const items = Object.entries(selectedEquipment)
+                .filter(([_, qty]) => qty > 0)
+                .map(([itemId, qty]) => {
+                    const item = catalog.equipment.find(i => i.item_id === itemId);
+                    return { item_id: itemId, name: item.name, quantity: qty, daily_price: item.daily_price };
+                });
+            if (items.length === 0) {
+                showError('Please select at least one item');
+                return;
+            }
+            const orderData = {
+                order_type: 'equipment',
+                user: tg.initDataUnsafe.user || { id: 123, username: 'test', first_name: 'Test User' },
+                items,
+                start_date: startDate,
+                end_date: endDate,
+                rental_days: Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) + 1
+            };
+            await submitOrder(orderData);
+        }
+
+        async function submitStudioOrder() {
+            const tariffId = document.getElementById('tariff-select').value;
+            const bookingDate = document.getElementById('booking-date').value;
+            const hours = parseInt(document.getElementById('hours').value);
+            const purpose = document.getElementById('purpose').value.trim();
+            if (!tariffId || !bookingDate || !hours || !purpose) {
+                showError('Please fill all fields');
+                return;
+            }
+            const tariff = catalog.tariffs.find(t => t.tariff_id === tariffId);
+            const orderData = {
+                order_type: 'studio',
+                user: tg.initDataUnsafe.user || { id: 123, username: 'test', first_name: 'Test User' },
+                tariff_id: tariffId,
+                tariff_name: tariff.tariff_name,
+                hours,
+                hourly_rate: tariff.hourly_rate,
+                booking_date: bookingDate,
+                purpose
+            };
+            await submitOrder(orderData);
+        }
+
+        async function submitOrder(orderData) {
+            showLoading(true);
+            try {
+                const response = await fetch(`${WEBHOOK_BASE}/order`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    tg.showPopup({ title: 'Success', message: 'Order submitted successfully!' });
+                    tg.close();
+                } else {
+                    showError('Failed to submit order');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
+            showLoading(false);
+        }
+
+        // Load catalog on page load
+        loadCatalog();
+    </script>
 </body>
 </html>
