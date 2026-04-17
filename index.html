@@ -3,421 +3,665 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio Rental</title>
+    <title>Studio Rental - Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            min-height: 100vh;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-top: 20px;
-            margin-bottom: 20px;
         }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
         .tabs {
             display: flex;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #f0f0f0;
+            margin-bottom: 30px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 4px;
+            backdrop-filter: blur(10px);
         }
+
         .tab {
             flex: 1;
-            padding: 15px;
-            text-align: center;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
-            font-weight: bold;
+            transition: all 0.3s ease;
         }
+
         .tab.active {
-            background: #667eea;
-            color: white;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0f172a;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
         }
+
         .tab-content {
             display: none;
         }
+
         .tab-content.active {
             display: block;
         }
+
         .equipment-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
+            margin-bottom: 30px;
         }
+
         .equipment-card {
-            background: white;
-            border-radius: 10px;
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(251, 191, 36, 0.1);
         }
+
         .equipment-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(251, 191, 36, 0.3);
         }
-        .equipment-card img {
+
+        .equipment-image {
             width: 100%;
-            height: 150px;
+            height: 180px;
             object-fit: cover;
+            background: linear-gradient(45deg, #374151, #4b5563);
         }
-        .equipment-card .info {
-            padding: 15px;
+
+        .equipment-info {
+            padding: 16px;
         }
-        .equipment-card h3 {
-            margin: 0 0 10px 0;
-            color: #333;
+
+        .equipment-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #f1f5f9;
         }
-        .equipment-card p {
-            margin: 5px 0;
-            color: #666;
+
+        .equipment-category {
+            color: #fbbf24;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
         }
-        .equipment-card .price {
-            font-weight: bold;
-            color: #667eea;
+
+        .equipment-description {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
         }
-        .quantity-selector {
+
+        .equipment-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 12px;
+        }
+
+        .quantity-controls {
             display: flex;
             align-items: center;
-            margin: 10px 0;
+            margin-bottom: 12px;
         }
-        .quantity-selector button {
-            background: #667eea;
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+
+        .quantity-btn {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid #fbbf24;
+            color: #fbbf24;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
             cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
-        .quantity-selector span {
-            margin: 0 10px;
-            font-weight: bold;
+
+        .quantity-btn:hover {
+            background: #fbbf24;
+            color: #0f172a;
         }
-        .date-picker {
-            margin: 20px 0;
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            padding: 8px;
+            margin: 0 8px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 6px;
+            background: rgba(30, 41, 59, 0.5);
+            color: #f1f5f9;
+            font-weight: 600;
         }
-        .date-picker label {
+
+        .date-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .date-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.5);
+            color: #f1f5f9;
+            font-size: 0.9rem;
+        }
+
+        .studio-form {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(251, 191, 36, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #f1f5f9;
         }
-        .date-picker input {
+
+        .form-select, .form-input, .form-textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.5);
+            color: #f1f5f9;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
         }
-        .studio-options {
-            margin: 20px 0;
+
+        .form-select:focus, .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.2);
         }
-        .studio-options select, .studio-options input, .studio-options textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
         }
-        .btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+
+        .tariff-option {
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.3);
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background 0.3s;
-            width: 100%;
-            margin-top: 20px;
+            transition: all 0.3s ease;
         }
-        .btn:hover {
-            background: #5a67d8;
+
+        .tariff-option:hover, .tariff-option.selected {
+            border-color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
         }
-        .error {
-            color: #e53e3e;
-            background: #fed7d7;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+
+        .tariff-name {
+            font-weight: 600;
+            color: #f1f5f9;
         }
+
+        .tariff-price {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .tariff-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
         .loading {
             text-align: center;
-            padding: 20px;
+            padding: 40px;
+            color: #94a3b8;
         }
+
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border: 3px solid rgba(251, 191, 36, 0.1);
+            border-top: 3px solid #fbbf24;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
+            margin: 0 auto 20px;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .equipment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .date-inputs {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 style="text-align: center; color: #333; margin-bottom: 30px;">Studio Rental</h1>
-        
+        <div class="header">
+            <h1>Studio Rental</h1>
+            <p>Rent professional equipment and book studio time</p>
+        </div>
+
         <div class="tabs">
-            <div class="tab active" onclick="switchTab('equipment')">Equipment</div>
-            <div class="tab" onclick="switchTab('studio')">Studio</div>
+            <button class="tab active" onclick="switchTab('equipment')">Equipment</button>
+            <button class="tab" onclick="switchTab('studio')">Studio</button>
         </div>
 
         <div id="equipment-tab" class="tab-content active">
-            <div class="date-picker">
-                <label>Rental Period:</label>
-                <input type="date" id="start-date" onchange="updateTotal()">
-                <input type="date" id="end-date" style="margin-top: 10px;" onchange="updateTotal()">
+            <div id="equipment-loading" class="loading">
+                <div class="spinner"></div>
+                Loading equipment catalog...
             </div>
-            <div id="equipment-grid" class="equipment-grid">
-                <!-- Equipment cards will be loaded here -->
-            </div>
-            <div id="equipment-total" style="font-size: 18px; font-weight: bold; margin: 20px 0; text-align: center;"></div>
-            <button class="btn" onclick="submitEquipmentOrder()">Rent Equipment</button>
+            <div id="equipment-grid" class="equipment-grid"></div>
+            <div id="equipment-error" class="error-message"></div>
         </div>
 
         <div id="studio-tab" class="tab-content">
-            <div class="studio-options">
-                <select id="tariff-select">
-                    <!-- Tariffs will be loaded here -->
-                </select>
-                <input type="date" id="booking-date">
-                <input type="number" id="hours" placeholder="Number of hours" min="1">
-                <textarea id="purpose" placeholder="Purpose of booking" rows="3"></textarea>
+            <div class="studio-form">
+                <div id="studio-loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    Loading studio tariffs...
+                </div>
+                <div id="studio-content">
+                    <div class="form-group">
+                        <label class="form-label">Select Tariff</label>
+                        <div id="tariff-options"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Booking Date</label>
+                        <input type="date" id="studio-date" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hours</label>
+                        <input type="number" id="studio-hours" class="form-input" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Purpose of Booking</label>
+                        <textarea id="studio-purpose" class="form-textarea" placeholder="Describe your project..." required></textarea>
+                    </div>
+                </div>
+                <div id="studio-error" class="error-message"></div>
             </div>
-            <div id="studio-total" style="font-size: 18px; font-weight: bold; margin: 20px 0; text-align: center;"></div>
-            <button class="btn" onclick="submitStudioOrder()">Book Studio</button>
-        </div>
-
-        <div id="error-message" class="error" style="display: none;"></div>
-        <div id="loading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>Loading...</p>
         </div>
     </div>
 
     <script>
-        const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook'; // Replace with your n8n URL
-        let tg = window.Telegram.WebApp;
-        let catalog = { equipment: [], tariffs: [] };
-        let selectedEquipment = {};
+        const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook'; // Replace with your actual n8n webhook URL
 
+        let tg = window.Telegram.WebApp;
+        let catalogData = null;
+        let selectedItems = [];
+        let selectedTariff = null;
+
+        // Initialize Telegram WebApp
+        tg.ready();
         tg.expand();
 
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelector(`.${tab === 'equipment' ? 'tab:first-child' : 'tab:last-child'}`).classList.add('active');
-            document.getElementById(`${tab}-tab`).classList.add('active');
-        }
-
-        function showError(message) {
-            const errorDiv = document.getElementById('error-message');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            setTimeout(() => errorDiv.style.display = 'none', 5000);
-        }
-
-        function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-        }
-
-        async function loadCatalog() {
-            showLoading(true);
-            try {
-                const response = await fetch(`${WEBHOOK_BASE}/catalog`, {
-                    headers: { 'ngrok-skip-browser-warning': 'true' }
-                });
-                const data = await response.json();
-                if (data.success) {
-                    catalog = data;
-                    renderEquipment();
-                    renderTariffs();
-                } else {
-                    showError('Failed to load catalog');
-                }
-            } catch (error) {
-                showError('Network error. Please try again.');
-            }
-            showLoading(false);
-        }
-
-        function renderEquipment() {
-            const grid = document.getElementById('equipment-grid');
-            grid.innerHTML = '';
-            catalog.equipment.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'equipment-card';
-                card.innerHTML = `
-                    <img src="${item.image_url || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="${item.name}">
-                    <div class="info">
-                        <h3>${item.name}</h3>
-                        <p>Category: ${item.category}</p>
-                        <p class="price">₽${item.daily_price}/day</p>
-                        <p>Available: ${item.available_qty}</p>
-                        <div class="quantity-selector">
-                            <button onclick="changeQuantity('${item.item_id}', -1)">-</button>
-                            <span id="qty-${item.item_id}">0</span>
-                            <button onclick="changeQuantity('${item.item_id}', 1)">+</button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderTariffs() {
-            const select = document.getElementById('tariff-select');
-            select.innerHTML = '<option value="">Select a tariff</option>';
-            catalog.tariffs.forEach(tariff => {
-                if (tariff.available) {
-                    const option = document.createElement('option');
-                    option.value = tariff.tariff_id;
-                    option.textContent = `${tariff.tariff_name} - ₽${tariff.hourly_rate}/hour (min ${tariff.min_hours}h)`;
-                    option.dataset.rate = tariff.hourly_rate;
-                    option.dataset.minHours = tariff.min_hours;
-                    select.appendChild(option);
-                }
-            });
-        }
-
-        function changeQuantity(itemId, delta) {
-            const qtySpan = document.getElementById(`qty-${itemId}`);
-            let qty = parseInt(qtySpan.textContent) + delta;
-            const item = catalog.equipment.find(i => i.item_id === itemId);
-            qty = Math.max(0, Math.min(qty, item.available_qty));
-            qtySpan.textContent = qty;
-            selectedEquipment[itemId] = qty;
-            updateTotal();
-        }
-
-        function updateTotal() {
-            const startDate = new Date(document.getElementById('start-date').value);
-            const endDate = new Date(document.getElementById('end-date').value);
-            if (startDate && endDate && startDate <= endDate) {
-                const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-                let total = 0;
-                Object.entries(selectedEquipment).forEach(([itemId, qty]) => {
-                    if (qty > 0) {
-                        const item = catalog.equipment.find(i => i.item_id === itemId);
-                        total += item.daily_price * qty * days;
-                    }
-                });
-                document.getElementById('equipment-total').textContent = `Total: ₽${total}`;
-            }
-        }
-
-        function updateStudioTotal() {
-            const tariffSelect = document.getElementById('tariff-select');
-            const hoursInput = document.getElementById('hours');
-            const selectedOption = tariffSelect.options[tariffSelect.selectedIndex];
-            if (selectedOption && hoursInput.value) {
-                const rate = parseInt(selectedOption.dataset.rate);
-                const hours = parseInt(hoursInput.value);
-                const minHours = parseInt(selectedOption.dataset.minHours);
-                if (hours >= minHours) {
-                    const total = rate * hours;
-                    document.getElementById('studio-total').textContent = `Total: ₽${total}`;
-                } else {
-                    document.getElementById('studio-total').textContent = `Minimum ${minHours} hours required`;
-                }
-            }
-        }
-
-        document.getElementById('tariff-select').addEventListener('change', updateStudioTotal);
-        document.getElementById('hours').addEventListener('input', updateStudioTotal);
-
-        async function submitEquipmentOrder() {
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
-            if (!startDate || !endDate) {
-                showError('Please select rental dates');
-                return;
-            }
-            const items = Object.entries(selectedEquipment)
-                .filter(([_, qty]) => qty > 0)
-                .map(([itemId, qty]) => {
-                    const item = catalog.equipment.find(i => i.item_id === itemId);
-                    return { item_id: itemId, name: item.name, quantity: qty, daily_price: item.daily_price };
-                });
-            if (items.length === 0) {
-                showError('Please select at least one item');
-                return;
-            }
-            const orderData = {
-                order_type: 'equipment',
-                user: tg.initDataUnsafe.user || { id: 123, username: 'test', first_name: 'Test User' },
-                items,
-                start_date: startDate,
-                end_date: endDate,
-                rental_days: Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) + 1
-            };
-            await submitOrder(orderData);
-        }
-
-        async function submitStudioOrder() {
-            const tariffId = document.getElementById('tariff-select').value;
-            const bookingDate = document.getElementById('booking-date').value;
-            const hours = parseInt(document.getElementById('hours').value);
-            const purpose = document.getElementById('purpose').value.trim();
-            if (!tariffId || !bookingDate || !hours || !purpose) {
-                showError('Please fill all fields');
-                return;
-            }
-            const tariff = catalog.tariffs.find(t => t.tariff_id === tariffId);
-            const orderData = {
-                order_type: 'studio',
-                user: tg.initDataUnsafe.user || { id: 123, username: 'test', first_name: 'Test User' },
-                tariff_id: tariffId,
-                tariff_name: tariff.tariff_name,
-                hours,
-                hourly_rate: tariff.hourly_rate,
-                booking_date: bookingDate,
-                purpose
-            };
-            await submitOrder(orderData);
-        }
-
-        async function submitOrder(orderData) {
-            showLoading(true);
-            try {
-                const response = await fetch(`${WEBHOOK_BASE}/order`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'ngrok-skip-browser-warning': 'true'
-                    },
-                    body: JSON.stringify(orderData)
-                });
-                const result = await response.json();
-                if (result.success) {
-                    tg.showPopup({ title: 'Success', message: 'Order submitted successfully!' });
-                    tg.close();
-                } else {
-                    showError('Failed to submit order');
-                }
-            } catch (error) {
-                showError('Network error. Please try again.');
-            }
-            showLoading(false);
-        }
+        // Set MainButton
+        tg.MainButton.setText('Submit Order');
+        tg.MainButton.hide();
 
         // Load catalog on page load
         loadCatalog();
+
+        function loadCatalog() {
+            fetch(`${WEBHOOK_BASE}/catalog`, {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    catalogData = data;
+                    displayEquipment(data.equipment);
+                    displayStudioTariffs(data.tariffs);
+                } else {
+                    showError('equipment', 'Failed to load catalog');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading catalog:', error);
+                showError('equipment', 'Failed to load catalog. Please check your connection.');
+            });
+        }
+
+        function displayEquipment(equipment) {
+            const grid = document.getElementById('equipment-grid');
+            const loading = document.getElementById('equipment-loading');
+            
+            loading.style.display = 'none';
+            
+            if (equipment.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #94a3b8; padding: 40px;">No equipment available at the moment.</p>';
+                return;
+            }
+
+            grid.innerHTML = equipment.map(item => `
+                <div class="equipment-card">
+                    <img src="${item.image_url || 'https://via.placeholder.com/280x180/374151/94a3b8?text=No+Image'}" 
+                         alt="${item.name}" class="equipment-image" 
+                         onerror="this.src='https://via.placeholder.com/280x180/374151/94a3b8?text=No+Image'">
+                    <div class="equipment-info">
+                        <div class="equipment-name">${item.name}</div>
+                        <div class="equipment-category">${item.category}</div>
+                        <div class="equipment-description">${item.description}</div>
+                        <div class="equipment-price">₽${item.daily_price.toLocaleString()}/day</div>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="changeQuantity('${item.item_id}', -1)">-</button>
+                            <input type="number" class="quantity-input" id="qty-${item.item_id}" value="0" min="0" max="${item.available_qty}" onchange="updateQuantity('${item.item_id}', this.value)">
+                            <button class="quantity-btn" onclick="changeQuantity('${item.item_id}', 1)">+</button>
+                        </div>
+                        <div class="date-inputs">
+                            <input type="date" id="start-${item.item_id}" class="date-input" onchange="updateDates('${item.item_id}')">
+                            <input type="date" id="end-${item.item_id}" class="date-input" onchange="updateDates('${item.item_id}')">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayStudioTariffs(tariffs) {
+            const container = document.getElementById('tariff-options');
+            const loading = document.getElementById('studio-loading');
+            
+            loading.style.display = 'none';
+            
+            if (tariffs.length === 0) {
+                container.innerHTML = '<p style="color: #94a3b8;">No tariffs available.</p>';
+                return;
+            }
+
+            container.innerHTML = tariffs.filter(t => t.available).map(tariff => `
+                <div class="tariff-option" onclick="selectTariff('${tariff.tariff_id}')">
+                    <div class="tariff-name">${tariff.tariff_name}</div>
+                    <div class="tariff-price">₽${tariff.hourly_rate.toLocaleString()}/hour (min ${tariff.min_hours}h)</div>
+                    <div class="tariff-desc">${tariff.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            updateMainButton();
+        }
+
+        function changeQuantity(itemId, delta) {
+            const input = document.getElementById(`qty-${itemId}`);
+            const newValue = Math.max(0, parseInt(input.value) + delta);
+            input.value = newValue;
+            updateQuantity(itemId, newValue);
+        }
+
+        function updateQuantity(itemId, quantity) {
+            quantity = parseInt(quantity) || 0;
+            
+            if (quantity > 0) {
+                const item = catalogData.equipment.find(i => i.item_id === itemId);
+                if (!item) return;
+                
+                const startDate = document.getElementById(`start-${itemId}`).value;
+                const endDate = document.getElementById(`end-${itemId}`).value;
+                
+                if (!startDate || !endDate) {
+                    alert('Please select start and end dates');
+                    document.getElementById(`qty-${itemId}`).value = 0;
+                    return;
+                }
+                
+                const existingIndex = selectedItems.findIndex(si => si.item_id === itemId);
+                if (existingIndex >= 0) {
+                    selectedItems[existingIndex] = {
+                        item_id: itemId,
+                        name: item.name,
+                        quantity: quantity,
+                        daily_price: item.daily_price,
+                        start_date: startDate,
+                        end_date: endDate
+                    };
+                } else {
+                    selectedItems.push({
+                        item_id: itemId,
+                        name: item.name,
+                        quantity: quantity,
+                        daily_price: item.daily_price,
+                        start_date: startDate,
+                        end_date: endDate
+                    });
+                }
+            } else {
+                selectedItems = selectedItems.filter(si => si.item_id !== itemId);
+            }
+            
+            updateMainButton();
+        }
+
+        function updateDates(itemId) {
+            const qty = document.getElementById(`qty-${itemId}`).value;
+            if (qty > 0) {
+                updateQuantity(itemId, qty);
+            }
+        }
+
+        function selectTariff(tariffId) {
+            document.querySelectorAll('.tariff-option').forEach(option => option.classList.remove('selected'));
+            document.querySelector(`[onclick="selectTariff('${tariffId}')"]`).classList.add('selected');
+            
+            selectedTariff = catalogData.tariffs.find(t => t.tariff_id === tariffId);
+            updateMainButton();
+        }
+
+        function updateMainButton() {
+            const equipmentTab = document.getElementById('equipment-tab').classList.contains('active');
+            
+            if (equipmentTab) {
+                if (selectedItems.length > 0) {
+                    tg.MainButton.show();
+                } else {
+                    tg.MainButton.hide();
+                }
+            } else {
+                const date = document.getElementById('studio-date').value;
+                const hours = document.getElementById('studio-hours').value;
+                const purpose = document.getElementById('studio-purpose').value;
+                
+                if (selectedTariff && date && hours && purpose) {
+                    tg.MainButton.show();
+                } else {
+                    tg.MainButton.hide();
+                }
+            }
+        }
+
+        function showError(tab, message) {
+            const errorEl = document.getElementById(`${tab}-error`);
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            
+            if (tab === 'equipment') {
+                document.getElementById('equipment-loading').style.display = 'none';
+            }
+        }
+
+        // MainButton click handler
+        tg.MainButton.onClick(() => {
+            submitOrder();
+        });
+
+        function submitOrder() {
+            const equipmentTab = document.getElementById('equipment-tab').classList.contains('active');
+            
+            let orderData;
+            const user = tg.initDataUnsafe?.user || { id: 12345, username: 'testuser', first_name: 'Test User' };
+            
+            if (equipmentTab) {
+                // Calculate rental days for each item
+                const itemsWithDays = selectedItems.map(item => {
+                    const start = new Date(item.start_date);
+                    const end = new Date(item.end_date);
+                    const diffTime = Math.abs(end - start);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include end date
+                    
+                    return {
+                        ...item,
+                        rental_days: diffDays
+                    };
+                });
+                
+                orderData = {
+                    order_type: 'equipment',
+                    user: user,
+                    items: itemsWithDays,
+                    start_date: itemsWithDays[0]?.start_date,
+                    end_date: itemsWithDays[0]?.end_date,
+                    rental_days: itemsWithDays[0]?.rental_days
+                };
+            } else {
+                const hours = parseInt(document.getElementById('studio-hours').value);
+                if (hours < selectedTariff.min_hours) {
+                    showError('studio', `Minimum ${selectedTariff.min_hours} hours required for this tariff`);
+                    return;
+                }
+                
+                orderData = {
+                    order_type: 'studio',
+                    user: user,
+                    tariff_id: selectedTariff.tariff_id,
+                    tariff_name: selectedTariff.tariff_name,
+                    hours: hours,
+                    hourly_rate: selectedTariff.hourly_rate,
+                    booking_date: document.getElementById('studio-date').value,
+                    purpose: document.getElementById('studio-purpose').value
+                };
+            }
+            
+            tg.MainButton.setText('Submitting...');
+            tg.MainButton.disable();
+            
+            fetch(`${WEBHOOK_BASE}/order`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true'
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    tg.showAlert('Order submitted successfully!');
+                    // Reset form
+                    selectedItems = [];
+                    selectedTariff = null;
+                    document.querySelectorAll('.quantity-input').forEach(input => input.value = 0);
+                    document.querySelectorAll('.date-input').forEach(input => input.value = '');
+                    document.querySelectorAll('.tariff-option').forEach(option => option.classList.remove('selected'));
+                    document.getElementById('studio-date').value = '';
+                    document.getElementById('studio-hours').value = '';
+                    document.getElementById('studio-purpose').value = '';
+                    updateMainButton();
+                } else {
+                    tg.showAlert('Failed to submit order. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting order:', error);
+                tg.showAlert('Network error. Please try again.');
+            })
+            .finally(() => {
+                tg.MainButton.setText('Submit Order');
+                tg.MainButton.enable();
+            });
+        }
+
+        // Update main button when form inputs change
+        document.addEventListener('input', updateMainButton);
     </script>
 </body>
 </html>
