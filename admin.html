@@ -3,349 +3,479 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Studio Rental</title>
+    <title>Studio Rental Admin Panel</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .container {
-            max-width: 500px;
-            width: 100%;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
             box-sizing: border-box;
         }
-        textarea {
-            resize: vertical;
-            min-height: 80px;
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
         }
-        .btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .login-form, .admin-panel {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(251, 191, 36, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .form-input, .form-textarea, .form-select {
             width: 100%;
-            transition: background 0.3s;
-            margin-top: 10px;
+            padding: 12px 16px;
+            border: 2px solid rgba(251, 191, 36, 0.2);
+            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.5);
+            color: #f1f5f9;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
-        .btn:hover {
-            background: #5a67d8;
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+            background: rgba(30, 41, 59, 0.7);
         }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0f172a;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+        }
+
         .btn-secondary {
-            background: #718096;
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            border: 1px solid #fbbf24;
         }
+
         .btn-secondary:hover {
-            background: #5a67d8;
+            background: rgba(251, 191, 36, 0.2);
         }
+
         .tabs {
             display: flex;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #f0f0f0;
+            margin-bottom: 30px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 4px;
+            backdrop-filter: blur(10px);
         }
+
         .tab {
             flex: 1;
-            padding: 12px;
-            text-align: center;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
-            font-weight: bold;
+            transition: all 0.3s ease;
         }
+
         .tab.active {
-            background: #667eea;
-            color: white;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0f172a;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
         }
+
         .tab-content {
             display: none;
         }
+
         .tab-content.active {
             display: block;
         }
-        .error {
-            color: #e53e3e;
-            background: #fed7d7;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+
+        .form-row {
+            display: flex;
+            gap: 16px;
         }
-        .success {
-            color: #38a169;
-            background: #c6f6d5;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+
+        .form-row .form-group {
+            flex: 1;
         }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #fbbf24;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e;
+            color: #86efac;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
         .loading {
             text-align: center;
             padding: 20px;
+            color: #94a3b8;
         }
+
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border: 3px solid rgba(251, 191, 36, 0.1);
+            border-top: 3px solid #fbbf24;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             animation: spin 1s linear infinite;
             margin: 0 auto 10px;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        #login-form { display: block; }
-        #admin-panel { display: none; }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+
+            .login-form, .admin-panel {
+                padding: 24px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Admin Panel</h1>
-        
-        <div id="login-form">
-            <div class="form-group">
-                <label>Username:</label>
-                <input type="text" id="username" placeholder="Enter username">
-            </div>
-            <div class="form-group">
-                <label>Password:</label>
-                <input type="password" id="password" placeholder="Enter password">
-            </div>
-            <button class="btn" onclick="login()">Login</button>
-            <div id="login-error" class="error" style="display: none;"></div>
+        <div class="header">
+            <h1>Studio Rental Admin</h1>
+            <p>Manage equipment and studio tariffs</p>
         </div>
 
-        <div id="admin-panel">
-            <div class="tabs">
-                <div class="tab active" onclick="switchTab('equipment')">Add Equipment</div>
-                <div class="tab" onclick="switchTab('tariff')">Add Tariff</div>
-            </div>
-
-            <div id="equipment-tab" class="tab-content active">
+        <div id="login-section">
+            <form class="login-form" id="login-form">
                 <div class="form-group">
-                    <label>Item ID:</label>
-                    <input type="text" id="eq-item-id" placeholder="e.g., eq_001">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" required>
                 </div>
                 <div class="form-group">
-                    <label>Name:</label>
-                    <input type="text" id="eq-name" placeholder="Equipment name">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" required>
                 </div>
-                <div class="form-group">
-                    <label>Category:</label>
-                    <input type="text" id="eq-category" placeholder="e.g., Camera">
-                </div>
-                <div class="form-group">
-                    <label>Daily Price (₽):</label>
-                    <input type="number" id="eq-daily-price" placeholder="5000">
-                </div>
-                <div class="form-group">
-                    <label>Available Quantity:</label>
-                    <input type="number" id="eq-available-qty" placeholder="3">
-                </div>
-                <div class="form-group">
-                    <label>Image URL:</label>
-                    <input type="url" id="eq-image-url" placeholder="https://...">
-                </div>
-                <div class="form-group">
-                    <label>Description:</label>
-                    <textarea id="eq-description" placeholder="Equipment description"></textarea>
-                </div>
-                <button class="btn" onclick="addEquipment()">Add Equipment</button>
-            </div>
-
-            <div id="tariff-tab" class="tab-content">
-                <div class="form-group">
-                    <label>Tariff ID:</label>
-                    <input type="text" id="tariff-id" placeholder="e.g., tariff_01">
-                </div>
-                <div class="form-group">
-                    <label>Tariff Name:</label>
-                    <input type="text" id="tariff-name" placeholder="e.g., Basic Hourly">
-                </div>
-                <div class="form-group">
-                    <label>Hourly Rate (₽):</label>
-                    <input type="number" id="hourly-rate" placeholder="3000">
-                </div>
-                <div class="form-group">
-                    <label>Minimum Hours:</label>
-                    <input type="number" id="min-hours" placeholder="2">
-                </div>
-                <div class="form-group">
-                    <label>Description:</label>
-                    <textarea id="tariff-description" placeholder="Tariff description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Available:</label>
-                    <select id="available">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </div>
-                <button class="btn" onclick="addTariff()">Add Tariff</button>
-            </div>
-
-            <button class="btn btn-secondary" onclick="logout()">Logout</button>
-            <div id="admin-message" style="display: none; margin-top: 20px;"></div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                <div id="login-error" class="error-message"></div>
+            </form>
         </div>
 
-        <div id="loading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>Processing...</p>
+        <div id="admin-section" style="display: none;">
+            <button class="btn btn-secondary logout-btn" onclick="logout()">Logout</button>
+            
+            <div class="admin-panel">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('equipment')">Add Equipment</button>
+                    <button class="tab" onclick="switchTab('tariff')">Add Tariff</button>
+                </div>
+
+                <div id="equipment-tab" class="tab-content active">
+                    <form id="equipment-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Equipment Name</label>
+                                <input type="text" id="equip-name" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Category</label>
+                                <input type="text" id="equip-category" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Daily Price (₽)</label>
+                                <input type="number" id="equip-price" class="form-input" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Available Quantity</label>
+                                <input type="number" id="equip-qty" class="form-input" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Image URL</label>
+                            <input type="url" id="equip-image" class="form-input" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea id="equip-description" class="form-textarea" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Equipment</button>
+                    </form>
+                </div>
+
+                <div id="tariff-tab" class="tab-content">
+                    <form id="tariff-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Tariff Name</label>
+                                <input type="text" id="tariff-name" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Hourly Rate (₽)</label>
+                                <input type="number" id="tariff-rate" class="form-input" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Minimum Hours</label>
+                                <input type="number" id="tariff-min-hours" class="form-input" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-group">
+                                    <input type="checkbox" id="tariff-available" checked>
+                                    <label for="tariff-available" style="margin: 0; cursor: pointer;">Available</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea id="tariff-description" class="form-textarea" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Tariff</button>
+                    </form>
+                </div>
+
+                <div id="success-message" class="success-message"></div>
+                <div id="error-message" class="error-message"></div>
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    Adding item...
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook'; // Replace with your n8n URL
+        const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook'; // Replace with your actual n8n webhook URL
         const VALID_USERNAME = 'admin';
         const VALID_PASSWORD = 'admin';
 
-        function showMessage(message, type = 'error') {
-            const msgDiv = document.getElementById('admin-message');
-            msgDiv.className = type;
-            msgDiv.textContent = message;
-            msgDiv.style.display = 'block';
-            setTimeout(() => msgDiv.style.display = 'none', 5000);
+        function showLoginError(message) {
+            const errorEl = document.getElementById('login-error');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
         }
 
-        function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-        }
-
-        function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('login-error');
-            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                errorDiv.style.display = 'none';
+        function showMessage(type, message) {
+            const successEl = document.getElementById('success-message');
+            const errorEl = document.getElementById('error-message');
+            
+            successEl.style.display = 'none';
+            errorEl.style.display = 'none';
+            
+            if (type === 'success') {
+                successEl.textContent = message;
+                successEl.style.display = 'block';
             } else {
-                errorDiv.textContent = 'Invalid username or password';
-                errorDiv.style.display = 'block';
+                errorEl.textContent = message;
+                errorEl.style.display = 'block';
             }
         }
 
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('admin-section').style.display = 'block';
+            } else {
+                showLoginError('Invalid username or password');
+            }
+        });
+
         function logout() {
-            document.getElementById('admin-panel').style.display = 'none';
-            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('admin-section').style.display = 'none';
+            document.getElementById('login-section').style.display = 'block';
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
             document.getElementById('login-error').style.display = 'none';
         }
 
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelector(`.${tab === 'equipment' ? 'tab:first-child' : 'tab:last-child'}`).classList.add('active');
-            document.getElementById(`${tab}-tab`).classList.add('active');
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
         }
 
-        async function addEquipment() {
-            const data = {
-                type: 'equipment',
-                item_id: document.getElementById('eq-item-id').value,
-                name: document.getElementById('eq-name').value,
-                category: document.getElementById('eq-category').value,
-                daily_price: parseInt(document.getElementById('eq-daily-price').value),
-                available_qty: parseInt(document.getElementById('eq-available-qty').value),
-                image_url: document.getElementById('eq-image-url').value,
-                description: document.getElementById('eq-description').value
-            };
+        document.getElementById('equipment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            addItem('equipment');
+        });
 
-            if (!data.item_id || !data.name || !data.category || isNaN(data.daily_price) || isNaN(data.available_qty)) {
-                showMessage('Please fill all required fields with valid values');
-                return;
+        document.getElementById('tariff-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            addItem('tariff');
+        });
+
+        function addItem(type) {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+            
+            let data;
+            if (type === 'equipment') {
+                data = {
+                    type: 'equipment',
+                    item_id: `eq_${Date.now()}`,
+                    name: document.getElementById('equip-name').value,
+                    category: document.getElementById('equip-category').value,
+                    daily_price: parseFloat(document.getElementById('equip-price').value),
+                    available_qty: parseInt(document.getElementById('equip-qty').value),
+                    image_url: document.getElementById('equip-image').value || '',
+                    description: document.getElementById('equip-description').value
+                };
+            } else {
+                data = {
+                    type: 'tariff',
+                    tariff_id: `tariff_${Date.now()}`,
+                    tariff_name: document.getElementById('tariff-name').value,
+                    hourly_rate: parseFloat(document.getElementById('tariff-rate').value),
+                    min_hours: parseInt(document.getElementById('tariff-min-hours').value),
+                    description: document.getElementById('tariff-description').value,
+                    available: document.getElementById('tariff-available').checked
+                };
             }
-
-            await submitAddItem(data);
-        }
-
-        async function addTariff() {
-            const data = {
-                type: 'tariff',
-                tariff_id: document.getElementById('tariff-id').value,
-                tariff_name: document.getElementById('tariff-name').value,
-                hourly_rate: parseInt(document.getElementById('hourly-rate').value),
-                min_hours: parseInt(document.getElementById('min-hours').value),
-                description: document.getElementById('tariff-description').value,
-                available: document.getElementById('available').value === 'true'
-            };
-
-            if (!data.tariff_id || !data.tariff_name || isNaN(data.hourly_rate) || isNaN(data.min_hours)) {
-                showMessage('Please fill all required fields with valid values');
-                return;
-            }
-
-            await submitAddItem(data);
-        }
-
-        async function submitAddItem(data) {
-            showLoading(true);
-            try {
-                const response = await fetch(`${WEBHOOK_BASE}/admin/add-item`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'ngrok-skip-browser-warning': 'true'
-                    },
-                    body: JSON.stringify(data)
-                });
-                const result = await response.json();
+            
+            fetch(`${WEBHOOK_BASE}/admin/add-item`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
                 if (result.success) {
-                    showMessage('Item added successfully!', 'success');
-                    // Clear form
-                    const form = data.type === 'equipment' ? 'eq-' : '';
-                    ['item-id', 'name', 'category', 'daily-price', 'available-qty', 'image-url', 'description'].forEach(field => {
-                        const el = document.getElementById(form + field);
-                        if (el) el.value = '';
-                    });
-                    if (data.type === 'tariff') {
-                        ['tariff-id', 'tariff-name', 'hourly-rate', 'min-hours', 'tariff-description'].forEach(field => {
-                            document.getElementById(field).value = '';
-                        });
-                        document.getElementById('available').value = 'true';
+                    showMessage('success', `${type === 'equipment' ? 'Equipment' : 'Tariff'} added successfully!`);
+                    // Reset form
+                    if (type === 'equipment') {
+                        document.getElementById('equipment-form').reset();
+                    } else {
+                        document.getElementById('tariff-form').reset();
+                        document.getElementById('tariff-available').checked = true;
                     }
                 } else {
-                    showMessage('Failed to add item');
+                    showMessage('error', `Failed to add ${type}. Please try again.`);
                 }
-            } catch (error) {
-                showMessage('Network error. Please try again.');
-            }
-            showLoading(false);
+            })
+            .catch(error => {
+                console.error('Error adding item:', error);
+                showMessage('error', 'Network error. Please try again.');
+            })
+            .finally(() => {
+                loading.style.display = 'none';
+            });
         }
     </script>
 </body>
