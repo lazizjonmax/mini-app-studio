@@ -1,899 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Admin Panel - Studio Rental</title>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-:root{
-  --bg:#fff;
-  --sidebar-bg:#f8f9fa;
-  --sidebar-hover:#e9ecef;
-  --primary:#3390ec;
-  --primary-dark:#2878b5;
-  --text:#212529;
-  --text-muted:#6c757d;
-  --border:#dee2e6;
-  --success:#28a745;
-  --danger:#dc3545;
-  --warning:#ffc107;
-  --radius:8px;
-  --radius-sm:4px;
-  --shadow:0 2px 8px rgba(0,0,0,.1);
-  --transition:all .2s ease;
-}
-
-html,body{
-  height:100%;
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-  background:#f5f5f5;
-  color:var(--text);
-  line-height:1.6;
-}
-
-.app{
-  display:flex;
-  min-height:100vh;
-}
-
-/* Login Screen */
-.login-container{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
-  background:linear-gradient(135deg,#6a11cb 0%,#2575fc 100%);
-  padding:20px;
-}
-
-.login-card{
-  background:#fff;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  width:100%;
-  max-width:400px;
-  padding:32px;
-}
-
-.login-header{
-  text-align:center;
-  margin-bottom:24px;
-}
-
-.login-header h2{
-  color:#333;
-  margin-bottom:8px;
-}
-
-.login-header p{
-  color:var(--text-muted);
-}
-
-.form-group{
-  margin-bottom:20px;
-}
-
-.form-group label{
-  display:block;
-  margin-bottom:6px;
-  font-weight:600;
-  font-size:14px;
-}
-
-.form-input{
-  width:100%;
-  padding:12px 16px;
-  border:1px solid var(--border);
-  border-radius:var(--radius-sm);
-  font-size:14px;
-  transition:var(--transition);
-}
-
-.form-input:focus{
-  outline:none;
-  border-color:var(--primary);
-  box-shadow:0 0 0 2px rgba(51,144,236,.25);
-}
-
-.btn{
-  width:100%;
-  padding:12px;
-  background:var(--primary);
-  color:#fff;
-  border:none;
-  border-radius:var(--radius-sm);
-  font-size:15px;
-  font-weight:600;
-  cursor:pointer;
-  transition:var(--transition);
-}
-
-.btn:hover{
-  background:var(--primary-dark);
-}
-
-.btn:active{
-  transform:scale(.98);
-}
-
-/* Dashboard */
-.dashboard{
-  display:flex;
-  flex:1;
-}
-
-.sidebar{
-  width:260px;
-  background:var(--sidebar-bg);
-  border-right:1px solid var(--border);
-  padding:20px 0;
-  overflow-y:auto;
-}
-
-.sidebar-header{
-  padding:0 20px 24px;
-  border-bottom:1px solid var(--border);
-}
-
-.sidebar-header h3{
-  color:var(--text);
-  margin:0;
-  font-size:18px;
-}
-
-.sidebar-nav{
-  list-style:none;
-  padding:0;
-}
-
-.sidebar-nav li{
-  margin:8px 0;
-}
-
-.sidebar-nav a{
-  display:flex;
-  align-items:center;
-  padding:12px 20px;
-  color:var(--text-muted);
-  text-decoration:none;
-  border-radius:var(--radius-sm);
-  font-weight:500;
-  transition:var(--transition);
-}
-
-.sidebar-nav a:hover{
-  background:var(--sidebar-hover);
-  color:var(--text);
-}
-
-.sidebar-nav a.active{
-  background:var(--primary);
-  color:#fff;
-}
-
-.sidebar-nav a .icon{
-  margin-right:12px;
-  font-size:18px;
-  width:20px;
-  text-align:center;
-}
-
-.main-content{
-  flex:1;
-  padding:24px;
-  overflow-y:auto;
-}
-
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:24px;
-}
-
-.header h2{
-  color:var(--text);
-  margin:0;
-  font-size:22px;
-}
-
-.user-info{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.user-avatar{
-  width:36px;
-  height:36px;
-  background:var(--primary);
-  color:#fff;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:600;
-}
-
-.user-name{
-  font-weight:500;
-}
-
-.text-muted{
-  color:var(--text-muted);
-  font-size:12px;
-}
-
-.tab-pane{
-  display:none;
-}
-
-.tab-pane.active{
-  display:block;
-  animation:fadeSlide .3s ease;
-}
-
-@keyframes fadeSlide{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.btn-logout{
-  background:none;
-  border:1px solid var(--danger);
-  color:var(--danger);
-  padding:6px 14px;
-  border-radius:var(--radius-sm);
-  font-size:12px;
-  font-weight:600;
-  cursor:pointer;
-  transition:var(--transition);
-}
-
-.btn-logout:hover{
-  background:var(--danger);
-  color:#fff;
-}
-
-.header-toggle-btn{
-  background:none;
-  border:none;
-  color:var(--text);
-  font-size:20px;
-  margin-right:12px;
-  cursor:pointer;
-  display:none;
-}
-
-/* Content Cards */
-.card{
-  background:#fff;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  margin-bottom:24px;
-  overflow:hidden;
-}
-
-.card-header{
-  padding:20px 24px;
-  border-bottom:1px solid var(--border);
-}
-
-.card-header h3{
-  margin:0;
-  font-size:18px;
-  color:var(--text);
-}
-
-.card-body{
-  padding:24px;
-}
-
-.form-row{
-  display:flex;
-  gap:16px;
-  margin-bottom:20px;
-}
-
-.form-group{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-}
-
-.form-group label{
-  margin-bottom:8px;
-  font-weight:600;
-  font-size:14px;
-  color:var(--text);
-}
-
-.form-input,
-.form-select{
-  padding:12px 16px;
-  border:1px solid var(--border);
-  border-radius:var(--radius-sm);
-  font-size:14px;
-  transition:var(--transition);
-}
-
-.form-input:focus,
-.form-select:focus{
-  outline:none;
-  border-color:var(--primary);
-  box-shadow:0 0 0 2px rgba(51,144,236,.25);
-}
-
-.textarea-group{
-  min-height:100px;
-}
-
-textarea.form-input{
-  resize:vertical;
-  min-height:100px;
-}
-
-.btn-submit{
-  background:var(--primary);
-  color:#fff;
-  border:none;
-  padding:12px 24px;
-  border-radius:var(--radius-sm);
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  transition:var(--transition);
-  margin-top:8px;
-}
-
-.btn-submit:hover{
-  background:var(--primary-dark);
-}
-
-.btn-submit:active{
-  transform:scale(.98);
-}
-
-/* Toast */
-.toast{
-  position:fixed;
-  top:20px;
-  right:20px;
-  min-width:280px;
-  padding:16px 20px;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  display:flex;
-  align-items:center;
-  gap:12px;
-  opacity:0;
-  transform:translateY(-20px);
-  transition:opacity .3s ease, transform .3s ease;
-  z-index:1000;
-}
-
-.toast.show{
-  opacity:1;
-  transform:translateY(0);
-}
-
-.toast.success{
-  background:var(--success);
-  color:#fff;
-}
-
-.toast.error{
-  background:var(--danger);
-  color:#fff;
-}
-
-.toast-icon{
-  font-size:20px;
-  flex-shrink:0;
-}
-
-.toast-message{
-  flex:1;
-}
-
-.toast-close{
-  background:none;
-  border:none;
-  color:rgba(255,255,255,.7);
-  font-size:18px;
-  cursor:pointer;
-  padding:0;
-  line-height:1;
-}
-
-.toast-close:hover{
-  color:#fff;
-}
-
-/* Responsive */
-@media(max-width:768px){
-  .sidebar{
-    position:fixed;
-    top:0;
-    left:0;
-    height:100vh;
-    z-index:100;
-    width:0;
-    overflow:hidden;
-    transition:width .3s ease;
-  }
-  .sidebar.open{
-    width:260px;
-    box-shadow:4px 0 20px rgba(0,0,0,.15);
-  }
-  .main-content{
-    width:100%;
-  }
-  .header-toggle-btn{
-    display:inline-block;
-  }
-  .sidebar-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.3);
-    z-index:99;
-  }
-  .sidebar-overlay.show{
-    display:block;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Studio Rental</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #5a67d8;
+        }
+        .btn-secondary {
+            background: #718096;
+        }
+        .btn-secondary:hover {
+            background: #5a67d8;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .error {
+            color: #e53e3e;
+            background: #fed7d7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #38a169;
+            background: #c6f6d5;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #login-form { display: block; }
+        #admin-panel { display: none; }
+    </style>
 </head>
 <body>
-
-<div id="app">
-  <!-- Login Screen -->
-  <div id="loginScreen">
-    <div class="login-container">
-      <div class="login-card">
-        <div class="login-header">
-          <h2>Admin Panel</h2>
-          <p>Studio Rental Management</p>
-        </div>
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" class="form-input" placeholder="Enter username" required>
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" class="form-input" placeholder="Enter password" required>
-          </div>
-          <button type="submit" class="btn">Login</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Dashboard -->
-  <div id="dashboard" style="display:none">
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-    <div class="app">
-      <!-- Sidebar -->
-      <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-          <h3>Admin Menu</h3>
-        </div>
-        <ul class="sidebar-nav" id="sidebarNav">
-          <li><a href="#" data-tab="equipment" class="nav-link active"><span class="icon">&#128247;</span>Add Equipment</a></li>
-          <li><a href="#" data-tab="tariff" class="nav-link"><span class="icon">&#127916;</span>Add Studio Tariff</a></li>
-          <li style="margin-top:24px;border-top:1px solid var(--border);padding-top:16px"><a href="#" id="logoutLink" style="color:var(--danger)"><span class="icon">&#128682;</span>Logout</a></li>
-        </ul>
-      </aside>
-
-      <!-- Main Content -->
-      <main class="main-content" id="mainContent">
-        <div class="header">
-          <div style="display:flex;align-items:center">
-            <button class="header-toggle-btn" id="menuToggle" onclick="toggleSidebar()">&#9776;</button>
-            <h2>Dashboard</h2>
-          </div>
-          <div class="user-info">
-            <div class="user-avatar">AD</div>
-            <div>
-              <div class="user-name" id="userName">Admin</div>
-              <div class="text-muted" id="userRole">Administrator</div>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        
+        <div id="login-form">
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" id="username" placeholder="Enter username">
             </div>
-            <button class="btn-logout" id="logoutBtn" onclick="handleLogout()">Logout</button>
-          </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="password" placeholder="Enter password">
+            </div>
+            <button class="btn" onclick="login()">Login</button>
+            <div id="login-error" class="error" style="display: none;"></div>
         </div>
 
-        <!-- Tab Content -->
-        <div id="tabContent">
-          <!-- Equipment Form -->
-          <div id="tabEquipment" class="tab-pane active">
-            <div class="card">
-              <div class="card-header">
-                <h3>Add New Equipment</h3>
-              </div>
-              <div class="card-body">
-                <form id="equipmentForm">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Item ID *</label>
-                      <input type="text" class="form-input" id="eqItemId" name="eqItemId" placeholder="e.g., eq_007" required>
-                    </div>
-                    <div class="form-group">
-                      <label>Name *</label>
-                      <input type="text" class="form-input" id="eqName" name="eqName" placeholder="Equipment name" required>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Category *</label>
-                      <input type="text" class="form-input" id="eqCategory" name="eqCategory" placeholder="e.g., Camera, Lens, Lighting" required>
-                    </div>
-                    <div class="form-group">
-                      <label>Daily Price *</label>
-                      <input type="number" class="form-input" id="eqDailyPrice" name="eqDailyPrice" placeholder="Price per day" min="0" required>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Available Quantity *</label>
-                      <input type="number" class="form-input" id="eqQty" name="eqQty" placeholder="Available units" min="0" required>
-                    </div>
-                    <div class="form-group">
-                      <label>Image URL</label>
-                      <input type="text" class="form-input" id="eqImageUrl" name="eqImageUrl" placeholder="Image URL (optional)">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-input" id="eqDescription" name="eqDescription" placeholder="Equipment description"></textarea>
-                  </div>
-                  <button type="submit" class="btn-submit" id="eqSubmitBtn">Add Equipment</button>
-                </form>
-              </div>
+        <div id="admin-panel">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('equipment')">Add Equipment</div>
+                <div class="tab" onclick="switchTab('tariff')">Add Tariff</div>
             </div>
-          </div>
 
-          <!-- Studio Tariff Form -->
-          <div id="tabTariff" class="tab-pane">
-            <div class="card">
-              <div class="card-header">
-                <h3>Add New Studio Tariff</h3>
-              </div>
-              <div class="card-body">
-                <form id="tariffForm">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Tariff ID *</label>
-                      <input type="text" class="form-input" id="tfTariffId" name="tfTariffId" placeholder="e.g., tariff_06" required>
-                    </div>
-                    <div class="form-group">
-                      <label>Tariff Name *</label>
-                      <input type="text" class="form-input" id="tfName" name="tfName" placeholder="Tariff display name" required>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Hourly Rate *</label>
-                      <input type="number" class="form-input" id="tfHourlyRate" name="tfHourlyRate" placeholder="Price per hour" min="0" required>
-                    </div>
-                    <div class="form-group">
-                      <label>Minimum Hours *</label>
-                      <input type="number" class="form-input" id="tfMinHours" name="tfMinHours" placeholder="Minimum booking hours" min="1" required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-input" id="tfDescription" name="tfDescription" placeholder="Tariff description"></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label>Available</label>
-                    <select class="form-select" id="tfAvailable" name="tfAvailable">
-                      <option value="true">Yes</option>
-                      <option value="false">No</option>
+            <div id="equipment-tab" class="tab-content active">
+                <div class="form-group">
+                    <label>Item ID:</label>
+                    <input type="text" id="eq-item-id" placeholder="e.g., eq_001">
+                </div>
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" id="eq-name" placeholder="Equipment name">
+                </div>
+                <div class="form-group">
+                    <label>Category:</label>
+                    <input type="text" id="eq-category" placeholder="e.g., Camera">
+                </div>
+                <div class="form-group">
+                    <label>Daily Price (₽):</label>
+                    <input type="number" id="eq-daily-price" placeholder="5000">
+                </div>
+                <div class="form-group">
+                    <label>Available Quantity:</label>
+                    <input type="number" id="eq-available-qty" placeholder="3">
+                </div>
+                <div class="form-group">
+                    <label>Image URL:</label>
+                    <input type="url" id="eq-image-url" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="eq-description" placeholder="Equipment description"></textarea>
+                </div>
+                <button class="btn" onclick="addEquipment()">Add Equipment</button>
+            </div>
+
+            <div id="tariff-tab" class="tab-content">
+                <div class="form-group">
+                    <label>Tariff ID:</label>
+                    <input type="text" id="tariff-id" placeholder="e.g., tariff_01">
+                </div>
+                <div class="form-group">
+                    <label>Tariff Name:</label>
+                    <input type="text" id="tariff-name" placeholder="e.g., Basic Hourly">
+                </div>
+                <div class="form-group">
+                    <label>Hourly Rate (₽):</label>
+                    <input type="number" id="hourly-rate" placeholder="3000">
+                </div>
+                <div class="form-group">
+                    <label>Minimum Hours:</label>
+                    <input type="number" id="min-hours" placeholder="2">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="tariff-description" placeholder="Tariff description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Available:</label>
+                    <select id="available">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
                     </select>
-                  </div>
-                  <button type="submit" class="btn-submit" id="tfSubmitBtn">Add Studio Tariff</button>
-                </form>
-              </div>
+                </div>
+                <button class="btn" onclick="addTariff()">Add Tariff</button>
             </div>
-          </div>
+
+            <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            <div id="admin-message" style="display: none; margin-top: 20px;"></div>
         </div>
-      </main>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- Toast Container -->
-<div id="toastContainer"></div>
+    <script>
+        const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook'; // Replace with your n8n URL
+        const VALID_USERNAME = 'admin';
+        const VALID_PASSWORD = 'admin';
 
-<script>
-// Configuration
-const WEBHOOK_BASE = 'https://smudgedly-subascending-raymon.ngrok-free.dev/webhook';
-const ADMIN_WEBHOOK = WEBHOOK_BASE + '/admin/add-item';
+        function showMessage(message, type = 'error') {
+            const msgDiv = document.getElementById('admin-message');
+            msgDiv.className = type;
+            msgDiv.textContent = message;
+            msgDiv.style.display = 'block';
+            setTimeout(() => msgDiv.style.display = 'none', 5000);
+        }
 
-const FETCH_HEADERS = {
-  'Content-Type': 'application/json',
-  'ngrok-skip-browser-warning': 'true'
-};
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
 
-async function apiFetch(url, options) {
-  var opts = options || {};
-  opts.headers = Object.assign({}, FETCH_HEADERS, opts.headers || {});
-  var res = await fetch(url, opts);
-  var contentType = res.headers.get('content-type') || '';
-  if (!contentType.includes('application/json')) {
-    var text = await res.text();
-    throw new Error('Server returned non-JSON response (status ' + res.status + '). Make sure n8n is running and the webhook URL is correct.');
-  }
-  return res;
-}
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('login-error');
+            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                errorDiv.style.display = 'none';
+            } else {
+                errorDiv.textContent = 'Invalid username or password';
+                errorDiv.style.display = 'block';
+            }
+        }
 
-// Hardcoded credentials
-const VALID_USERNAME = 'admin';
-const VALID_PASSWORD = 'admin';
+        function logout() {
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('login-error').style.display = 'none';
+        }
 
-// DOM Elements
-const loginScreen = document.getElementById('loginScreen');
-const dashboard = document.getElementById('dashboard');
-const loginForm = document.getElementById('loginForm');
-const usernameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
-const userNameEl = document.getElementById('userName');
-const userRoleEl = document.getElementById('userRole');
-const sidebar = document.getElementById('sidebar');
-const sidebarNav = document.getElementById('sidebarNav');
-const tabContent = document.getElementById('tabContent');
-const equipmentForm = document.getElementById('equipmentForm');
-const tariffForm = document.getElementById('tariffForm');
-const toastContainer = document.getElementById('toastContainer');
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.${tab === 'equipment' ? 'tab:first-child' : 'tab:last-child'}`).classList.add('active');
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
 
-// State
-let isLoggedIn = false;
+        async function addEquipment() {
+            const data = {
+                type: 'equipment',
+                item_id: document.getElementById('eq-item-id').value,
+                name: document.getElementById('eq-name').value,
+                category: document.getElementById('eq-category').value,
+                daily_price: parseInt(document.getElementById('eq-daily-price').value),
+                available_qty: parseInt(document.getElementById('eq-available-qty').value),
+                image_url: document.getElementById('eq-image-url').value,
+                description: document.getElementById('eq-description').value
+            };
 
-// Initialize
-function init() {
-  if (sessionStorage.getItem('isLoggedIn') === 'true') {
-    showDashboard();
-  } else {
-    showLogin();
-  }
+            if (!data.item_id || !data.name || !data.category || isNaN(data.daily_price) || isNaN(data.available_qty)) {
+                showMessage('Please fill all required fields with valid values');
+                return;
+            }
 
-  loginForm.addEventListener('submit', handleLogin);
-  equipmentForm.addEventListener('submit', handleEquipmentSubmit);
-  tariffForm.addEventListener('submit', handleTariffSubmit);
-  sidebarNav.addEventListener('click', handleSidebarNavClick);
+            await submitAddItem(data);
+        }
 
-  var logoutLink = document.getElementById('logoutLink');
-  if (logoutLink) {
-    logoutLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      handleLogout();
-    });
-  }
-}
+        async function addTariff() {
+            const data = {
+                type: 'tariff',
+                tariff_id: document.getElementById('tariff-id').value,
+                tariff_name: document.getElementById('tariff-name').value,
+                hourly_rate: parseInt(document.getElementById('hourly-rate').value),
+                min_hours: parseInt(document.getElementById('min-hours').value),
+                description: document.getElementById('tariff-description').value,
+                available: document.getElementById('available').value === 'true'
+            };
 
-function showLogin() {
-  loginScreen.style.display = 'flex';
-  dashboard.style.display = 'none';
-  sessionStorage.removeItem('isLoggedIn');
-  isLoggedIn = false;
-}
+            if (!data.tariff_id || !data.tariff_name || isNaN(data.hourly_rate) || isNaN(data.min_hours)) {
+                showMessage('Please fill all required fields with valid values');
+                return;
+            }
 
-function showDashboard() {
-  loginScreen.style.display = 'none';
-  dashboard.style.display = 'flex';
-  sessionStorage.setItem('isLoggedIn', 'true');
-  isLoggedIn = true;
+            await submitAddItem(data);
+        }
 
-  userNameEl.textContent = VALID_USERNAME.charAt(0).toUpperCase() + VALID_USERNAME.slice(1);
-  userRoleEl.textContent = 'Administrator';
-
-  activateTab('equipment');
-}
-
-function handleLogin(e) {
-  e.preventDefault();
-  var username = usernameInput.value.trim();
-  var password = passwordInput.value;
-
-  if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-    showDashboard();
-    loginForm.reset();
-  } else {
-    showToast('Invalid username or password', 'error');
-    passwordInput.value = '';
-  }
-}
-
-function handleLogout() {
-  showLogin();
-}
-
-function toggleSidebar() {
-  var sb = document.getElementById('sidebar');
-  var overlay = document.getElementById('sidebarOverlay');
-  sb.classList.toggle('open');
-  overlay.classList.toggle('show');
-}
-
-function closeSidebar() {
-  var sb = document.getElementById('sidebar');
-  var overlay = document.getElementById('sidebarOverlay');
-  sb.classList.remove('open');
-  overlay.classList.remove('show');
-}
-
-// Handle sidebar navigation
-function handleSidebarNavClick(e) {
-  var link = e.target.closest('.nav-link');
-  if (!link) return;
-
-  e.preventDefault();
-  var tabId = link.dataset.tab;
-
-  document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
-  link.classList.add('active');
-
-  activateTab(tabId);
-  closeSidebar();
-}
-
-// Activate tab
-function activateTab(tabId) {
-  // Hide all tab panes
-  document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-  // Show selected tab pane
-  document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`).classList.add('active');
-}
-
-// Handle equipment form submission
-async function handleEquipmentSubmit(e) {
-  e.preventDefault();
-  var submitBtn = document.getElementById('eqSubmitBtn');
-  var originalText = submitBtn.textContent;
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Adding...';
-
-  try {
-    var itemId = document.getElementById('eqItemId').value.trim();
-    var name = document.getElementById('eqName').value.trim();
-    var category = document.getElementById('eqCategory').value.trim();
-    var dailyPrice = parseFloat(document.getElementById('eqDailyPrice').value);
-    var qty = parseInt(document.getElementById('eqQty').value);
-    var imageUrl = document.getElementById('eqImageUrl').value.trim() || null;
-    var description = document.getElementById('eqDescription').value.trim() || null;
-
-    if (!itemId || !name || !category || isNaN(dailyPrice) || isNaN(qty)) {
-      throw new Error('Please fill in all required fields correctly');
-    }
-
-    var payload = {
-      item_id: itemId,
-      name: name,
-      category: category,
-      daily_price: dailyPrice,
-      available_qty: qty,
-      image_url: imageUrl,
-      description: description,
-      type: 'equipment'
-    };
-
-    var response = await apiFetch(ADMIN_WEBHOOK, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-
-    var result = await response.json();
-
-    if (!response.ok || result.success === false) {
-      throw new Error(result.error || result.message || 'Failed to add equipment');
-    }
-
-    showToast('Equipment added successfully!', 'success');
-    e.target.reset();
-  } catch (error) {
-    console.error('Error adding equipment:', error);
-    showToast(error.message, 'error');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-  }
-}
-
-// Handle tariff form submission
-async function handleTariffSubmit(e) {
-  e.preventDefault();
-  var submitBtn = document.getElementById('tfSubmitBtn');
-  var originalText = submitBtn.textContent;
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Adding...';
-
-  try {
-    var tariffId = document.getElementById('tfTariffId').value.trim();
-    var tariffName = document.getElementById('tfName').value.trim();
-    var hourlyRate = parseFloat(document.getElementById('tfHourlyRate').value);
-    var minHours = parseInt(document.getElementById('tfMinHours').value);
-    var description = document.getElementById('tfDescription').value.trim() || null;
-    var available = document.getElementById('tfAvailable').value === 'true';
-
-    if (!tariffId || !tariffName || isNaN(hourlyRate) || isNaN(minHours)) {
-      throw new Error('Please fill in all required fields correctly');
-    }
-
-    var payload = {
-      tariff_id: tariffId,
-      tariff_name: tariffName,
-      hourly_rate: hourlyRate,
-      min_hours: minHours,
-      description: description,
-      available: available,
-      type: 'tariff'
-    };
-
-    var response = await apiFetch(ADMIN_WEBHOOK, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-
-    var result = await response.json();
-
-    if (!response.ok || result.success === false) {
-      throw new Error(result.error || result.message || 'Failed to add tariff');
-    }
-
-    showToast('Studio tariff added successfully!', 'success');
-    e.target.reset();
-  } catch (error) {
-    console.error('Error adding tariff:', error);
-    showToast(error.message, 'error');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-  }
-}
-
-// Toast notification system
-function showToast(message, type = 'info') {
-  // Remove any existing toasts
-  const existingToasts = toastContainer.querySelectorAll('.toast');
-  existingToasts.forEach(toast => toast.remove());
-
-  // Create toast element
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.innerHTML = `
-    <div class="toast-icon">${type === 'success' ? '&#9989;' : type === 'error' ? '&#10060;' : '&#8505;'}</div>
-    <div class="toast-message">${message}</div>
-    <button class="toast-close" aria-label="Close">&times;</button>
-  `;
-
-  // Add to container
-  toastContainer.appendChild(toast);
-
-  // Trigger reflow for animation
-  void toast.offsetWidth;
-
-  // Show toast
-  toast.classList.add('show');
-
-  // Auto remove after delay
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  }, 5000);
-
-  // Close button
-  toast.querySelector('.toast-close').addEventListener('click', () => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  });
-}
-
-// Initialize on load
-document.addEventListener('DOMContentLoaded', init);
-</script>
+        async function submitAddItem(data) {
+            showLoading(true);
+            try {
+                const response = await fetch(`${WEBHOOK_BASE}/admin/add-item`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showMessage('Item added successfully!', 'success');
+                    // Clear form
+                    const form = data.type === 'equipment' ? 'eq-' : '';
+                    ['item-id', 'name', 'category', 'daily-price', 'available-qty', 'image-url', 'description'].forEach(field => {
+                        const el = document.getElementById(form + field);
+                        if (el) el.value = '';
+                    });
+                    if (data.type === 'tariff') {
+                        ['tariff-id', 'tariff-name', 'hourly-rate', 'min-hours', 'tariff-description'].forEach(field => {
+                            document.getElementById(field).value = '';
+                        });
+                        document.getElementById('available').value = 'true';
+                    }
+                } else {
+                    showMessage('Failed to add item');
+                }
+            } catch (error) {
+                showMessage('Network error. Please try again.');
+            }
+            showLoading(false);
+        }
+    </script>
 </body>
 </html>
