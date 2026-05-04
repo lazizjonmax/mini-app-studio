@@ -3,182 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>96studio | Professional Media Production</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>96 Studio - Ijara va Podkast Xizmatlari</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
             color: #ffffff;
-            scroll-behavior: smooth;
+            line-height: 1.6;
         }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+
+        header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #333;
         }
-        .gradient-text {
-            background: linear-gradient(90deg, #ffffff, #888888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+
+        .logo img {
+            width: 150px;
+            height: auto;
         }
-        .hover-scale {
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
         }
-        .hover-scale:hover {
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #00ff88;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://i.ibb.co/21g4QZQt/main-studio-980x590.png');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 50px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #00ff88;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: #cccccc;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #00ff88;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        .services {
+            padding: 80px 50px;
+            background: #111;
+        }
+
+        .services h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #00ff88;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: 1px solid #333;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff88;
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .service-card h3 {
+            padding: 20px;
+            color: #00ff88;
+        }
+
+        .service-card p {
+            padding: 0 20px 20px;
+            color: #cccccc;
+        }
+
+        .equipment {
+            padding: 80px 50px;
+            background: #0a0a0a;
+        }
+
+        .equipment h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #00ff88;
+        }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .equipment-item {
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+        }
+
+        .equipment-item:hover {
             transform: scale(1.03);
+            border-color: #00ff88;
         }
-        .studio-border {
-            position: relative;
+
+        .equipment-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
         }
-        .studio-border::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-            z-index: -1;
-            border-radius: 1.5rem;
+
+        .equipment-item h4 {
+            padding: 15px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .podcast-section {
+            padding: 80px 50px;
+            background: #111;
+            text-align: center;
+        }
+
+        .podcast-section h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: #00ff88;
+        }
+
+        .podcast-section p {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 18px;
+            color: #cccccc;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature {
+            padding: 30px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .feature h3 {
+            color: #00ff88;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background: #000;
+            padding: 40px 50px;
+            text-align: center;
+            border-top: 2px solid #333;
+        }
+
+        .contact-info {
+            margin-bottom: 20px;
+        }
+
+        .contact-info a {
+            color: #00ff88;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        footer p {
+            color: #666;
+            font-size: 14px;
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://i.ibb.co/hxmdsp0P/96-STUDIO-logo-1280-X720.png" alt="96 Studio Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Bosh sahifa</a></li>
+                <li><a href="#services">Xizmatlar</a></li>
+                <li><a href="#equipment">Jihozlar</a></li>
+                <li><a href="#podcast">Podkast</a></li>
+                <li><a href="#contact">Aloqa</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 px-6 py-4 flex justify-between items-center glass-effect">
-        <div class="flex items-center gap-3">
-            <img src="https://i.ibb.co/v6HhSQ6P/Untitled-design.png" alt="Logo" class="h-10 w-10 rounded-full object-cover">
-            <span class="font-extrabold text-xl tracking-tighter uppercase">96<span class="text-gray-400">studio</span></span>
-        </div>
-        <div class="hidden md:flex gap-8 text-xs font-semibold uppercase tracking-widest">
-            <a href="#home" class="hover:text-gray-400 transition-colors">Asosiy</a>
-            <a href="#studio" class="hover:text-gray-400 transition-colors">Studiya</a>
-            <a href="#equipment" class="hover:text-gray-400 transition-colors">Texnika</a>
-            <a href="#contact" class="bg-white text-black px-5 py-2 rounded-full hover:bg-gray-200 transition-all">Bog'lanish</a>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="home" class="relative h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden">
-        <div class="absolute z-0 w-full h-full opacity-40">
-            <img src="https://i.ibb.co/zVH386Ny/image-2026-04-24-08-16-53.png" class="w-full h-full object-cover" alt="96studio background">
-        </div>
-        <div class="relative z-10 max-w-4xl">
-            <img src="https://i.ibb.co/v6HhSQ6P/Untitled-design.png" alt="96studio Logo" class="w-28 h-28 mx-auto mb-8 rounded-full shadow-2xl border-2 border-white/20 animate-pulse">
-            <h1 class="text-6xl md:text-9xl font-extrabold mb-6 gradient-text leading-tight tracking-tighter">
-                96STUDIO
-            </h1>
-            <p class="text-gray-400 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light leading-relaxed">
-                Professional video va audio kontent yaratish markazi. <br> Sifat, aniqlik va kreativlikning uyg'unligi.
-            </p>
-            <a href="#contact" class="px-10 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-300 transition-all duration-300 transform hover:scale-110 inline-block uppercase tracking-wider text-sm">
-                Loyihani boshlash
-            </a>
-        </div>
+    <section class="hero" id="home">
+        <h1>96 Studio</h1>
+        <p>Professional videokamera va audio jihozlar ijarasi. Sifatli podkast yozib olish xizmati.</p>
+        <a href="#contact" class="cta-button">Bog'lanish</a>
     </section>
 
-    <!-- Studio Section -->
-    <section id="studio" class="py-32 px-6 max-w-7xl mx-auto">
-        <div class="text-center mb-20">
-            <h2 class="text-4xl font-bold mb-4 tracking-tight">Studiya Ko'rinishi</h2>
-            <div class="w-16 h-1 bg-white mx-auto rounded-full"></div>
-        </div>
-        <div class="relative group overflow-hidden rounded-3xl border border-white/10 hover-scale studio-border">
-            <img src="https://i.ibb.co/zVH386Ny/image-2026-04-24-08-16-53.png" alt="96studio interior" class="w-full h-auto object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
-            <div class="absolute bottom-10 left-10">
-                <p class="text-2xl font-bold">Premium Atmosfera</p>
-                <p class="text-gray-400">96studio'da har bir detal professional ish jarayoni uchun moslashtirilgan.</p>
+    <section class="services" id="services">
+        <h2>Xizmatlarimiz</h2>
+        <div class="service-grid">
+            <div class="service-card">
+                <img src="https://i.ibb.co/Tqm39gY9/amaron-200xs-1000x750.jpg" alt="Kamera Ijarasi">
+                <h3>Videokamera Ijarasi</h3>
+                <p>Sony FX3, Sony Alpha 7 kabi professional videokameralarni ijaraga oling.</p>
+            </div>
+            <div class="service-card">
+                <img src="https://i.ibb.co/99Jcw9rF/caster-pro-1920x1081.jpg" alt="Audio Jihozlar">
+                <h3>Audio Jihozlar</h3>
+                <p>Rode Caster Pro 2 va professional mikrafonlar ijarasi.</p>
+            </div>
+            <div class="service-card">
+                <img src="https://i.ibb.co/21g4QZQt/main-studio-980x590.png" alt="Podkast Studiya">
+                <h3>Podkast Yozish</h3>
+                <p>To'liq jihozlangan studiyada podkastlaringizni sifatli yozib oling.</p>
             </div>
         </div>
     </section>
 
-    <!-- Equipment Section -->
-    <section id="equipment" class="py-32 px-6 bg-zinc-950">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20">
-                <h2 class="text-4xl font-bold mb-4 tracking-tight">Professional Texnikalar</h2>
-                <p class="text-gray-500">Dunyo standartlariga mos eng zamonaviy qurilmalar</p>
+    <section class="equipment" id="equipment">
+        <h2>Ijaraga Olinadigan Jihozlar</h2>
+        <div class="equipment-grid">
+            <div class="equipment-item">
+                <img src="https://i.ibb.co/0y7SvjkV/sony-fx3-940x851.jpg" alt="Sony FX3">
+                <h4>Sony FX3</h4>
             </div>
-
-            <div class="grid md:grid-cols-2 gap-16">
-                <!-- FX3 Camera -->
-                <div class="glass-effect p-8 rounded-3xl hover-scale group">
-                    <div class="overflow-hidden rounded-2xl mb-8">
-                        <img src="https://i.ibb.co/Gf839jmn/imgi-1-fx3-feature3.jpg" alt="Sony FX3" class="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <h3 class="text-3xl font-bold mb-4">Sony FX3 Cinema Line</h3>
-                    <p class="text-gray-400 mb-8 leading-relaxed">Kinematografik tasvir sifati. Yuqori dinamik diapazon va professional ranglar bilan har bir kadrni san'atga aylantiramiz.</p>
-                    <div class="flex gap-2">
-                        <span class="text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full text-gray-300">4K Cinematic</span>
-                        <span class="text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full text-gray-300">Full-Frame</span>
-                    </div>
-                </div>
-
-                <!-- Rode Caster Pro 2 -->
-                <div class="glass-effect p-8 rounded-3xl hover-scale group">
-                    <div class="overflow-hidden rounded-2xl mb-8">
-                        <img src="https://i.ibb.co/8gGxYZYf/imgi-12-RODECaster-Pro-II-review-8.jpg" alt="Rode Caster Pro 2" class="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <h3 class="text-3xl font-bold mb-4">Rode Caster Pro II</h3>
-                    <p class="text-gray-400 mb-8 leading-relaxed">Podkastlar va audio yozishlar uchun eng kuchli stansiya. Kristalldek tiniq ovoz va professional audio boshqaruv.</p>
-                    <div class="flex gap-2">
-                        <span class="text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full text-gray-300">Hi-Fi Audio</span>
-                        <span class="text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full text-gray-300">Podcasting</span>
-                    </div>
-                </div>
+            <div class="equipment-item">
+                <img src="https://i.ibb.co/Pvrz2v9f/sony-7-alfa-2560x1440.jpg" alt="Sony Alpha 7">
+                <h4>Sony Alpha 7</h4>
+            </div>
+            <div class="equipment-item">
+                <img src="https://i.ibb.co/G38wV3sN/rode-caster-pro-2-1920x2560.jpg" alt="Rode Caster Pro 2">
+                <h4>Rode Caster Pro 2</h4>
+            </div>
+            <div class="equipment-item">
+                <img src="https://i.ibb.co/h1hzKxMj/rodemic-837x1600.jpg" alt="Rode Mikrafon">
+                <h4>Rode Mikrafon</h4>
+            </div>
+            <div class="equipment-item">
+                <img src="https://i.ibb.co/gbBZ2dDb/amaron-200xs-1024x955.jpg" alt="Amaron 200xs">
+                <h4>Amaron 200xs</h4>
             </div>
         </div>
     </section>
 
-    <!-- Lifestyle Section -->
-    <section class="py-32 px-6 max-w-7xl mx-auto">
-        <div class="grid md:grid-cols-2 items-center gap-16">
-            <div class="order-2 md:order-1">
-                <div class="rounded-3xl overflow-hidden border border-white/10 hover-scale shadow-2xl">
-                    <img src="https://i.ibb.co/xqmny6Pf/imgi-1-rode-nth100-lifestyle-insitu-four-people-podcasting-january-2022-1080x1080-rgb.jpg" alt="96studio in action" class="w-full h-auto">
-                </div>
+    <section class="podcast-section" id="podcast">
+        <h2>Podkast Xizmatlari</h2>
+        <p>96 Studio da professional podkast yozib olish, montaj qilish va efirga uzatish xizmatlaridan foydalaning. Zamonaviy jihozlar va qulay muhit.</p>
+        <div class="features">
+            <div class="feature">
+                <h3>Sifatli Ovoz</h3>
+                <p>Rode Caster Pro 2 bilan kristal toza ovoz yozish.</p>
             </div>
-            <div class="order-1 md:order-2">
-                <h2 class="text-4xl md:text-5xl font-bold mb-8 leading-tight tracking-tighter">Sizning g'oyalaringizni <br> <span class="text-gray-500">reallikka aylantiramiz</span></h2>
-                <p class="text-gray-400 text-lg mb-10 leading-relaxed">
-                    96studio nafaqat texnik jihozlar to'plami, balki kreativ g'oyalar uyg'onadigan joydir. Biz sizga maksimal imkoniyatlarni taqdim etamiz.
-                </p>
-                <div class="space-y-5">
-                    <div class="flex items-center gap-4 p-4 glass-effect rounded-2xl">
-                        <span class="text-white bg-white/20 p-1 rounded-full">✓</span>
-                        <span class="font-medium">Professional yoritish tizimi</span>
-                    </div>
-                    <div class="flex items-center gap-4 p-4 glass-effect rounded-2xl">
-                        <span class="text-white bg-white/20 p-1 rounded-full">✓</span>
-                        <span class="font-medium">Sho'vqin izolatsiyasi (Acoustic)</span>
-                    </div>
-                    <div class="flex items-center gap-4 p-4 glass-effect rounded-2xl">
-                        <span class="text-white bg-white/20 p-1 rounded-full">✓</span>
-                        <span class="font-medium">Tezkor va sifatli montaj</span>
-                    </div>
-                </div>
+            <div class="feature">
+                <h3>Professional Muhit</h3>
+                <p>To'liq jihozlangan podkast studiyasi.</p>
+            </div>
+            <div class="feature">
+                <h3>Montaj Xizmati</h3>
+                <p>Podkastlaringizni professional tarzda montaj qilish.</p>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <footer id="contact" class="py-32 px-6 bg-zinc-950 border-t border-white/5 text-center">
-        <div class="max-w-3xl mx-auto">
-            <img src="https://i.ibb.co/v6HhSQ6P/Untitled-design.png" alt="Logo" class="w-20 h-20 mx-auto mb-8 rounded-full shadow-xl">
-            <h2 class="text-4xl font-bold mb-6 tracking-tight">96studio bilan bog'laning</h2>
-            <p class="text-gray-500 mb-12 text-lg">Sifatli kontent yaratishni xohlaysizmi? Biz sizga yordam beramiz.</p>
-            
-            <a href="https://t.me/faxriddin_al_fargoniy" target="_blank" class="flex items-center justify-center gap-3 w-full md:w-auto mx-auto px-12 py-5 bg-[#24A1DA] text-white font-bold rounded-2xl hover:bg-[#1d8bc7] transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-blue-500/30 uppercase tracking-widest text-sm">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.903-0.952c-.487-0.242-1.045-0.378-1.612-0.378h-2.213l-.457 2.482c-.044.24-.23.44-.47.52-.24.08-.49.04-.7.01l-2.42-.726c-.52-.157-.86-.53-0.94-1.05l-.31-2.03c-.05-.33.1-.65.32-.87.22-.22.54-.37.87-.42l2.03-.31c.52-.157.99-.04 1.25.33.26.37.33.85.23 1.33l-.457 2.482c-.044.24-.23.44-.47.52-.24.08-.49.04-.7.01l-2.42-.726c-.52-.157-.86-.53-0.94-1.05l-.31-2.03c-.05-.33.1-.65.32-.87.22-.22.54-.37.87-.42l2.03-.31c.52-.157.99-.04 1.25.33.26.37.33.85.23 1.33z"/></svg>
-                @faxriddin_al_fargoniy
-            </a>
-
-            <div class="mt-24 text-gray-600 text-xs uppercase tracking-widest">
-                &copy; 2024 96studio. Barcha huquqlar himoyalangan.
-            </div>
+    <footer id="contact">
+        <div class="contact-info">
+            <h3>Bog'lanish</h3>
+            <p>Telegram: <a href="https://t.me/faxriddin_al_fargoniy">@faxriddin_al_fargoniy</a></p>
         </div>
-    </footer}
-
+        <p>&copy; 2026 96 Studio. Barcha huquqlar himoyalangan.</p>
+    </footer>
 </body>
 </html>
